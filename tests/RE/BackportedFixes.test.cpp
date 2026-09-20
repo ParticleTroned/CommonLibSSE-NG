@@ -66,7 +66,7 @@ TEST_CASE("Backports/SmallSharedArray empty and occupied", "[unit][backports]")
 	}
 }
 
-TEST_CASE("Backports/Precipitation signed transition thresholds", "[unit][backports]")
+TEST_CASE("Backports/Precipitation covers every stored byte", "[unit][backports]")
 {
 	EngineStorage<RE::Sky>        skyStorage;
 	EngineStorage<RE::TESWeather> weatherStorage;
@@ -77,25 +77,68 @@ TEST_CASE("Backports/Precipitation signed transition thresholds", "[unit][backpo
 
 	for (auto flag : { RE::TESWeather::WeatherDataFlag::kRainy, RE::TESWeather::WeatherDataFlag::kSnow }) {
 		weather->data.flags = flag;
-		weather->data.precipitationBeginFadeIn = -64;
-		weather->data.precipitationEndFadeOut = 64;
-		sky->lastWeather = nullptr;
-		sky->currentWeather = weather;
-		sky->currentWeatherPct = 0.5F;
-		CHECK_FALSE(sky->IsRaining());
-		CHECK_FALSE(sky->IsSnowing());
-		sky->currentWeatherPct = 0.9F;
-		CHECK(sky->IsRaining() == (flag == RE::TESWeather::WeatherDataFlag::kRainy));
-		CHECK(sky->IsSnowing() == (flag == RE::TESWeather::WeatherDataFlag::kSnow));
-		sky->currentWeather = nullptr;
-		sky->lastWeather = weather;
-		sky->currentWeatherPct = 0.1F;
-		CHECK(sky->IsRaining() == (flag == RE::TESWeather::WeatherDataFlag::kRainy));
-		CHECK(sky->IsSnowing() == (flag == RE::TESWeather::WeatherDataFlag::kSnow));
-		sky->currentWeatherPct = 0.3F;
-		CHECK_FALSE(sky->IsRaining());
-		CHECK_FALSE(sky->IsSnowing());
+		for (unsigned value = 0; value <= 255; ++value) {
+			weather->data.precipitationBeginFadeIn = static_cast<std::uint8_t>(value);
+			weather->data.precipitationEndFadeOut = static_cast<std::uint8_t>(value);
+			for (float progress : { 0.0F, 0.25F, 0.5F, 0.75F, 1.0F }) {
+				CAPTURE(value, progress);
+				sky->currentWeatherPct = progress;
+				sky->currentWeather = weather;
+				sky->lastWeather = nullptr;
+				const bool started = value < progress * 255.0F;
+				CHECK(sky->IsRaining() == (started && flag == RE::TESWeather::WeatherDataFlag::kRainy));
+				CHECK(sky->IsSnowing() == (started && flag == RE::TESWeather::WeatherDataFlag::kSnow));
+				sky->currentWeather = nullptr;
+				sky->lastWeather = weather;
+				const bool remaining = value > progress * 255.0F;
+				CHECK(sky->IsRaining() == (remaining && flag == RE::TESWeather::WeatherDataFlag::kRainy));
+				CHECK(sky->IsSnowing() == (remaining && flag == RE::TESWeather::WeatherDataFlag::kSnow));
+			}
+		}
 	}
+}
+
+TEST_CASE("Backports/Precipitation transitions combine matching weather flags", "[unit][backports]")
+{
+	EngineStorage<RE::Sky>        skyStorage;
+	EngineStorage<RE::TESWeather> currentStorage;
+	EngineStorage<RE::TESWeather> previousStorage;
+	auto*                         sky = skyStorage.get();
+	sky->currentWeather = currentStorage.get();
+	sky->lastWeather = previousStorage.get();
+	currentStorage.get()->data.flags = RE::TESWeather::WeatherDataFlag::kSnow;
+	currentStorage.get()->data.precipitationBeginFadeIn = 64;
+	previousStorage.get()->data.flags = RE::TESWeather::WeatherDataFlag::kRainy;
+	previousStorage.get()->data.precipitationEndFadeOut = 192;
+	sky->currentWeatherPct = 64.0F / 255.0F;
+	CHECK(sky->IsRaining());
+	CHECK_FALSE(sky->IsSnowing());
+	sky->currentWeatherPct = 0.5F;
+	CHECK(sky->IsRaining());
+	CHECK(sky->IsSnowing());
+	sky->currentWeatherPct = 192.0F / 255.0F;
+	CHECK_FALSE(sky->IsRaining());
+	CHECK(sky->IsSnowing());
+	currentStorage.get()->data.flags = RE::TESWeather::WeatherDataFlag::kPleasant;
+	previousStorage.get()->data.flags = RE::TESWeather::WeatherDataFlag::kCloudy;
+	CHECK_FALSE(sky->IsRaining());
+	CHECK_FALSE(sky->IsSnowing());
+}
+
+TEST_CASE("Backports/Opaque Havok references remain copyable", "[unit][backports]")
+{
+	decltype(RE::hkbCharacter::footIkDriver) foot;
+	auto                                     footCopy = foot;
+	footCopy.reset();
+	CHECK_FALSE(footCopy);
+	decltype(RE::hkbCharacter::handIkDriver) hand;
+	auto                                     handCopy = hand;
+	handCopy.reset();
+	CHECK_FALSE(handCopy);
+	decltype(RE::hkbCharacterData::mirroredSkeletonInfo) skeleton;
+	auto                                                 skeletonCopy = skeleton;
+	skeletonCopy.reset();
+	CHECK_FALSE(skeletonCopy);
 }
 
 #if defined(SKYRIM_CROSS_VR)
@@ -112,6 +155,9 @@ TEST_CASE("Backports/Frame state dispatch preserves SE AE and VR", "[unit][backp
 	alignas(16) std::array<std::byte, 0x200> storage{};
 	auto*                                    state = reinterpret_cast<RE::BSGraphics::State*>(storage.data());
 	CHECK(reinterpret_cast<std::byte*>(&state->GetInsideFrame()) == storage.data() + insideOffset);
+	CHECK(reinterpret_cast<std::byte*>(&state->GetLetterbox()) == storage.data() + insideOffset + 1);
+	CHECK(reinterpret_cast<std::byte*>(&state->GetUseEarlyZ()) == storage.data() + compiledOffset + 1);
+	CHECK(reinterpret_cast<std::byte*>(&state->GetFrameCount()) == storage.data() + (version == SKSE::RUNTIME_SSE_1_7_99 ? 0x54 : 0x4C));
 	CHECK(reinterpret_cast<std::byte*>(&state->GetCompiledShaderThisFrame()) == storage.data() + compiledOffset);
 }
 
@@ -124,9 +170,9 @@ TEST_CASE("Backports/VR runtime accessors address native layouts", "[unit][backp
 	auto*                                    camera = reinterpret_cast<RE::NiCamera*>(storage.data());
 	CHECK(reinterpret_cast<std::byte*>(&camera->GetRuntimeData2()) == storage.data() + 0x1CC);
 	auto* menu = reinterpret_cast<RE::RaceSexMenu*>(storage.data());
-	CHECK(reinterpret_cast<std::byte*>(&menu->GetVRRuntimeData().sliderData) == storage.data() + 0xF8);
+	CHECK(reinterpret_cast<std::byte*>(&menu->GetVRRuntimeData()->sliderData) == storage.data() + 0xF8);
 	auto* inventory = reinterpret_cast<RE::Inventory3DManager*>(storage.data());
-	CHECK(reinterpret_cast<std::byte*>(&inventory->GetVRRuntimeData()) == storage.data() + 0x58);
+	CHECK(reinterpret_cast<std::byte*>(inventory->GetVRRuntimeData()) == storage.data() + 0x58);
 	auto* state = reinterpret_cast<RE::BSGraphics::State*>(storage.data());
 	CHECK(reinterpret_cast<std::byte*>(&state->GetCompiledShaderThisFrame()) == storage.data() + 0x54);
 	CHECK(reinterpret_cast<std::byte*>(&state->GetInsideFrame()) == storage.data() + 0x50);
@@ -135,5 +181,51 @@ TEST_CASE("Backports/VR runtime accessors address native layouts", "[unit][backp
 	void* bones = storage.data() + 0x100;
 	std::memcpy(storage.data() + 0x50, &bones, sizeof(bones));
 	CHECK(skin->GetBoneDataAddress(1) == storage.data() + 0x170);
+}
+#endif
+
+#if defined(SKYRIM_CROSS_VR) || defined(EXCLUSIVE_SKYRIM_VR)
+TEST_CASE("Backports/Menu views reject the wrong runtime", "[unit][backports]")
+{
+#	ifdef SKYRIM_CROSS_VR
+	using Runtime = REL::Module::Runtime;
+	const auto [version, runtime, inventoryOffset] = GENERATE(
+		std::tuple{ SKSE::RUNTIME_SSE_1_5_97, Runtime::SE, 0x58 },
+		std::tuple{ SKSE::RUNTIME_SSE_1_6_353, Runtime::AE, 0x58 },
+		std::tuple{ SKSE::RUNTIME_SSE_1_6_629, Runtime::AE, 0x60 },
+		std::tuple{ SKSE::RUNTIME_SSE_1_7_99, Runtime::AE, 0x60 },
+		std::tuple{ SKSE::RUNTIME_VR_1_4_15, Runtime::VR, 0x58 });
+	REQUIRE(REL::Module::mock(version, runtime, L"BackportTest.exe", 0x1000));
+	const SKSE::stl::scope_exit reset{ [] { REL::Module::reset(); } };
+#	else
+	constexpr auto inventoryOffset = 0x58;
+#	endif
+	alignas(16) std::array<std::byte, 0x800> storage{};
+	auto*                                    menu = reinterpret_cast<RE::RaceSexMenu*>(storage.data());
+	auto*                                    inventory = reinterpret_cast<RE::Inventory3DManager*>(storage.data());
+	if (REL::Module::IsVR()) {
+		CHECK(menu->GetRuntimeData() == nullptr);
+		CHECK(std::as_const(*menu).GetRuntimeData() == nullptr);
+		REQUIRE(menu->GetVRRuntimeData());
+		CHECK(reinterpret_cast<std::byte*>(&menu->GetVRRuntimeData()->sex) == storage.data() + 0x150);
+		CHECK(reinterpret_cast<const std::byte*>(&std::as_const(*menu).GetVRRuntimeData()->sliderData) == storage.data() + 0xF8);
+		CHECK(inventory->GetRuntimeData() == nullptr);
+		CHECK(std::as_const(*inventory).GetRuntimeData() == nullptr);
+		CHECK(reinterpret_cast<std::byte*>(inventory->GetVRRuntimeData()) == storage.data() + 0x58);
+		CHECK(reinterpret_cast<const std::byte*>(std::as_const(*inventory).GetVRRuntimeData()) == storage.data() + 0x58);
+		const std::uint32_t count = 2;
+		std::memcpy(storage.data() + 0x258, &count, sizeof(count));
+		CHECK(inventory->GetVRRuntimeData()->loadedModels.size() == count);
+	} else {
+		CHECK(menu->GetVRRuntimeData() == nullptr);
+		CHECK(std::as_const(*menu).GetVRRuntimeData() == nullptr);
+		CHECK(inventory->GetVRRuntimeData() == nullptr);
+		CHECK(std::as_const(*inventory).GetVRRuntimeData() == nullptr);
+		REQUIRE(menu->GetRuntimeData());
+		CHECK(reinterpret_cast<std::byte*>(&menu->GetRuntimeData()->sliderData) == storage.data() + 0x140);
+		CHECK(reinterpret_cast<const std::byte*>(&std::as_const(*menu).GetRuntimeData()->sex) == storage.data() + 0x198);
+		CHECK(reinterpret_cast<std::byte*>(inventory->GetRuntimeData()) == storage.data() + inventoryOffset);
+		CHECK(reinterpret_cast<const std::byte*>(std::as_const(*inventory).GetRuntimeData()) == storage.data() + inventoryOffset);
+	}
 }
 #endif

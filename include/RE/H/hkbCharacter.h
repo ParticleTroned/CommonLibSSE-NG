@@ -10,8 +10,6 @@ namespace RE
 	class hkbAnimationBindingSet;
 	class hkbBehaviorGraph;
 	class hkbCharacterSetup;
-	class hkbFootIkDriver;
-	class hkbHandIkDriver;
 	class hkbProjectData;
 	class hkbRagdollDriver;
 	class hkQsTransform;
@@ -40,8 +38,8 @@ namespace RE
 		hkStringPtr                      name;                       // 28
 		hkRefPtr<hkbRagdollDriver>       ragdollDriver;              // 30
 		hkRefVariant                     characterControllerDriver;  // 38
-		hkRefPtr<hkbFootIkDriver>        footIkDriver;               // 40
-		hkRefPtr<hkbHandIkDriver>        handIkDriver;               // 48
+		hkRefVariant                     footIkDriver;               // 40
+		hkRefVariant                     handIkDriver;               // 48
 		hkRefPtr<hkbCharacterSetup>      setup;                      // 50
 		hkRefPtr<hkbBehaviorGraph>       behaviorGraph;              // 58
 		hkRefPtr<hkbProjectData>         projectData;                // 60

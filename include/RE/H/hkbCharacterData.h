@@ -10,7 +10,6 @@ namespace RE
 	class hkbCharacterStringData;
 	class hkbFootIkDriverInfo;
 	class hkbHandIkDriverInfo;
-	class hkbMirroredSkeletonInfo;
 	class hkbVariableInfo;
 	class hkbVariableValueSet;
 
@@ -25,24 +24,24 @@ namespace RE
 		inline static constexpr auto VTABLE = VTABLE_hkbCharacterData;
 
 		// members
-		float                             unk10;                    // 10
-		float                             unk14;                    // 14
-		std::uint64_t                     unk18;                    // 18
-		hkRefPtr<hkReferencedObject>      unk20;                    // 20 - ref-counted ptr, concrete type not yet named
-		std::uint64_t                     unk28;                    // 28
-		float                             modelUpMS[4];             // 30 (hkVector4)
-		float                             modelForwardMS[4];        // 40 (hkVector4)
-		float                             modelRightMS[4];          // 50 (hkVector4)
-		hkArray<hkbVariableInfo>          characterPropertyInfos;   // 60
-		hkArray<std::int32_t>             numBonesPerLod;           // 70
-		hkRefPtr<hkbVariableValueSet>     characterPropertyValues;  // 80
-		hkRefPtr<hkbFootIkDriverInfo>     footIkDriverInfo;         // 88
-		hkRefPtr<hkbHandIkDriverInfo>     handIkDriverInfo;         // 90
-		hkRefPtr<hkbCharacterStringData>  stringData;               // 98 - identity vs. mirroredSkeletonInfo below not yet distinguished
-		hkRefPtr<hkbMirroredSkeletonInfo> mirroredSkeletonInfo;     // A0 - identity vs. stringData above not yet distinguished
-		float                             scale;                    // A8
-		std::int16_t                      numHands;                 // AC
-		std::int16_t                      numFloatSlots;            // AE
+		float                            unk10;                    // 10
+		float                            unk14;                    // 14
+		std::uint64_t                    unk18;                    // 18
+		hkRefPtr<hkReferencedObject>     unk20;                    // 20 - ref-counted ptr, concrete type not yet named
+		std::uint64_t                    unk28;                    // 28
+		float                            modelUpMS[4];             // 30 (hkVector4)
+		float                            modelForwardMS[4];        // 40 (hkVector4)
+		float                            modelRightMS[4];          // 50 (hkVector4)
+		hkArray<hkbVariableInfo>         characterPropertyInfos;   // 60
+		hkArray<std::int32_t>            numBonesPerLod;           // 70
+		hkRefPtr<hkbVariableValueSet>    characterPropertyValues;  // 80
+		hkRefPtr<hkbFootIkDriverInfo>    footIkDriverInfo;         // 88
+		hkRefPtr<hkbHandIkDriverInfo>    handIkDriverInfo;         // 90
+		hkRefPtr<hkbCharacterStringData> stringData;               // 98 - identity vs. mirroredSkeletonInfo below not yet distinguished
+		hkRefPtr<hkReferencedObject>     mirroredSkeletonInfo;     // A0 - concrete type not confirmed
+		float                            scale;                    // A8
+		std::int16_t                     numHands;                 // AC
+		std::int16_t                     numFloatSlots;            // AE
 	};
 	static_assert(sizeof(hkbCharacterData) == 0xB0);
 }
