@@ -29,9 +29,9 @@ namespace RE
 		using size_type = std::uint32_t;
 
 		std::uint32_t _pad00{ 0 };     // 00
-		size_type     _free{ 0 };      // 04 - # of free slots
-		size_type     _good{ 0 };      // 08 - last free index
-		size_type     _capacity{ 0 };  // 0C - total # of slots, always a power of 2
+		size_type     _capacity{ 0 };  // 04 - total # of slots, always a power of 2
+		size_type     _free{ 0 };      // 08 - # of free slots
+		size_type     _good{ 0 };      // 0C - last free index
 	};
 
 	// scatter table with chaining

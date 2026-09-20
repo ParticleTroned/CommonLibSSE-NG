@@ -37,7 +37,7 @@ namespace RE
 			BSTArray<InstanceData>                   instances;               // 08
 			std::uint32_t                            num;                     // 20
 			bool                                     shaderPropertyUpToDate;  // 24
-			std::int8_t                              treeType;                // 25
+			std::uint8_t                             treeType;                // 25
 			std::uint16_t                            pad26;                   // 26
 		};
 		static_assert(sizeof(TreeGroup) == 0x28);

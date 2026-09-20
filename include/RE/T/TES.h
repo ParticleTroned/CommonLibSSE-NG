@@ -53,8 +53,8 @@ namespace RE
 		class SystemEventAdapter : public BSTEventSink<BSSystemEvent>
 		{
 		public:
-			inline static constexpr auto RTTI = RTTI_TES;
-			inline static constexpr auto VTABLE = VTABLE_TES;
+			inline static constexpr auto RTTI = RTTI_TES__SystemEventAdapter;
+			inline static constexpr auto VTABLE = VTABLE_TES__SystemEventAdapter;
 
 			~SystemEventAdapter() override;  // 00
 

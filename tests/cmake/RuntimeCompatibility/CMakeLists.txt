@@ -1,0 +1,20 @@
+cmake_minimum_required(VERSION 3.19)
+project(RuntimeCompatibility VERSION 1.0.0 LANGUAGES CXX)
+
+include("${CMAKE_CURRENT_LIST_DIR}/../../../cmake/CommonLibSSE.cmake")
+add_library(CommonLibSSE INTERFACE)
+add_library(CommonLibSSE::CommonLibSSE ALIAS CommonLibSSE)
+
+set(runtimes)
+foreach(index RANGE 1 ${RUNTIME_COUNT})
+    list(APPEND runtimes "1.4.${index}")
+endforeach()
+add_commonlibsse_plugin(Probe COMPATIBLE_RUNTIMES ${runtimes})
+
+file(READ "${CMAKE_CURRENT_BINARY_DIR}/__ProbePlugin.cpp" generated)
+foreach(index RANGE 1 ${RUNTIME_COUNT})
+    string(FIND "${generated}" "REL::Version{ 1, 4, ${index}, 0 }" found)
+    if(found EQUAL -1)
+        message(FATAL_ERROR "Missing runtime ${index} in plugin declaration")
+    endif()
+endforeach()
