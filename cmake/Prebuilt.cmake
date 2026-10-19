@@ -23,23 +23,63 @@ function(_commonlib_prebuilt_complete dir out_var)
     endif()
 endfunction()
 
-# A CRT/config match doesn't guarantee the bundle links: MSVC STL internal dispatch helpers
-# (e.g. __std_replace_copy_2) aren't part of the stable ABI, so a toolset mismatch in either
-# direction can LNK2001 at final link. Requires matching major.minor against TOOLSET_VERSION.txt
-# (a bundle/compiler predating this stamp is treated as compatible); CMAKE_CXX_COMPILER_ID, not
-# MSVC, since MSVC is also TRUE for clang-cl, whose version isn't the cl.exe one being compared.
+# MSVC and clang-cl can disagree on inline STL calling conventions
+# even when they link the same runtime library.
+function(_commonlib_toolchain_id out_var)
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+        set(${out_var} "msvc" PARENT_SCOPE)
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC")
+        set(${out_var} "clangcl" PARENT_SCOPE)
+    else()
+        set(${out_var} "other" PARENT_SCOPE)
+    endif()
+endfunction()
+
+# Compiler family and major.minor must match; a shared CRT alone does not ensure ABI compatibility.
+# Historical MSVC bundles without either stamp retain their compatibility fallback.
 function(_commonlib_prebuilt_toolset_compatible dir out_var)
-    set(${out_var} TRUE PARENT_SCOPE)
-    if(NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR NOT CMAKE_CXX_COMPILER_VERSION)
+    set(${out_var} FALSE PARENT_SCOPE)
+    _commonlib_toolchain_id(_consumer_id)
+    if(_consumer_id STREQUAL "other")
+        message(STATUS "CommonLibSSE prebuilt bundles do not support this compiler - building from source.")
+        return()
+    endif()
+    set(_bundle_id "msvc")  # bundles predating TOOLCHAIN_ID.txt were all MSVC-built
+    set(_family_stamp "${dir}/TOOLCHAIN_ID.txt")
+    if(IS_DIRECTORY "${_family_stamp}")
+        message(STATUS "CommonLibSSE prebuilt compiler stamp is not a file - building from source.")
+        return()
+    elseif(EXISTS "${_family_stamp}")
+        file(READ "${_family_stamp}" _bundle_id)
+        string(STRIP "${_bundle_id}" _bundle_id)
+    endif()
+    if(NOT _consumer_id STREQUAL _bundle_id)
+        message(STATUS "CommonLibSSE prebuilt bundle was built by ${_bundle_id} but this build uses "
+                        "${_consumer_id} - building from source: objects from different compilers "
+                        "disagree on the return convention of inline STL functions "
+                        "(e.g. std::strong_ordering), which corrupts memory at runtime.")
         return()
     endif()
     set(_stamp "${dir}/TOOLSET_VERSION.txt")
-    if(NOT EXISTS "${_stamp}")
+    if(IS_DIRECTORY "${_stamp}")
+        message(STATUS "CommonLibSSE prebuilt compiler version stamp is not a file - building from source.")
+        return()
+    elseif(NOT EXISTS "${_stamp}")
+        if(NOT EXISTS "${_family_stamp}")
+            set(${out_var} TRUE PARENT_SCOPE)
+        else()
+            message(STATUS "CommonLibSSE prebuilt compiler version stamp is missing - building from source.")
+        endif()
         return()
     endif()
     file(READ "${_stamp}" _producer_version)
     string(STRIP "${_producer_version}" _producer_version)
     if(NOT _producer_version MATCHES "^[0-9]+\\.[0-9]+(\\.[0-9]+)*$")
+        message(STATUS "CommonLibSSE prebuilt compiler version stamp is invalid - building from source.")
+        return()
+    endif()
+    if(NOT CMAKE_CXX_COMPILER_VERSION MATCHES "^[0-9]+\\.[0-9]+(\\.[0-9]+)*$")
+        message(STATUS "CommonLibSSE consumer compiler version is unavailable or invalid - building from source.")
         return()
     endif()
     string(REGEX MATCH "^([0-9]+)\\.([0-9]+)" _ignore "${_producer_version}")
@@ -47,11 +87,12 @@ function(_commonlib_prebuilt_toolset_compatible dir out_var)
     string(REGEX MATCH "^([0-9]+)\\.([0-9]+)" _ignore "${CMAKE_CXX_COMPILER_VERSION}")
     set(_consumer_majmin "${CMAKE_MATCH_1}.${CMAKE_MATCH_2}")
     if(NOT _consumer_majmin STREQUAL _producer_majmin)
-        set(${out_var} FALSE PARENT_SCOPE)
-        message(STATUS "CommonLibSSE prebuilt bundle was built with a different MSVC toolset "
+        message(STATUS "CommonLibSSE prebuilt bundle was built with a different ${_bundle_id} toolset "
                         "(${_producer_version}) than this one (${CMAKE_CXX_COMPILER_VERSION}) "
                         "- building from source instead of risking an unresolved-STL-symbol link.")
+        return()
     endif()
+    set(${out_var} TRUE PARENT_SCOPE)
 endfunction()
 
 function(commonlib_resolve_prebuilt out_dir)
@@ -75,13 +116,16 @@ function(commonlib_resolve_prebuilt out_dir)
         return()
     endif()
 
-    # The bundle is the Release dynamic CRT (/MD). A static CRT (/MT) or the Debug dynamic CRT
-    # (/MDd) is a mismatch (→ LNK4098), so fall back to source. Accept any DLL runtime except the
-    # always-Debug literal — not a plain STREQUAL "MultiThreadedDLL", since the standard /MD value
-    # is the Debug-conditional genex "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL". Unset = /MD default.
+    # Only known release /MD selections are safe; arbitrary generator expressions may select /MDd.
+    # An unset value uses CMake's standard Debug-conditional dynamic CRT default.
     if(DEFINED CMAKE_MSVC_RUNTIME_LIBRARY
-       AND (NOT "${CMAKE_MSVC_RUNTIME_LIBRARY}" MATCHES "DLL"
-            OR "${CMAKE_MSVC_RUNTIME_LIBRARY}" STREQUAL "MultiThreadedDebugDLL"))
+       AND NOT "${CMAKE_MSVC_RUNTIME_LIBRARY}" STREQUAL "MultiThreadedDLL"
+       AND NOT "${CMAKE_MSVC_RUNTIME_LIBRARY}" STREQUAL "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+        return()
+    endif()
+
+    # Runtime selection changes public layouts, including when the bundle is explicitly supplied.
+    if(NOT (ENABLE_SKYRIM_SE AND ENABLE_SKYRIM_AE AND ENABLE_SKYRIM_VR))
         return()
     endif()
 
@@ -100,13 +144,6 @@ function(commonlib_resolve_prebuilt out_dir)
     endif()
 
     if(NOT (DEFINED ENV{GITHUB_ACTIONS} OR COMMONLIB_PREBUILT))
-        return()
-    endif()
-
-    # Only the skyrim runtime set is ABI-critical (it changes public-header layout). The lib
-    # bakes every REX config + xbyak as additive supersets — and their json/toml parsers live in
-    # the lib, not the headers — so a consumer may enable any subset with no extra dependency.
-    if(NOT (ENABLE_SKYRIM_SE AND ENABLE_SKYRIM_AE AND ENABLE_SKYRIM_VR))
         return()
     endif()
 
@@ -140,6 +177,12 @@ function(commonlib_resolve_prebuilt out_dir)
         return()
     endif()
     if(EXISTS "${_cache}/.failed")
+        return()
+    endif()
+
+    # Published bundles use MSVC; other compilers must build from source.
+    _commonlib_toolchain_id(_toolchain)
+    if(NOT _toolchain STREQUAL "msvc")
         return()
     endif()
 
