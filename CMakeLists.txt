@@ -133,6 +133,22 @@ if(SKSE_SUPPORT_PATCH_SAFETY)
 		SOURCE_SUBDIR src/hde
 	)
 	FetchContent_MakeAvailable(hde64)
+
+	# Compile an initialized copy so MSVC can establish the prefix byte's value
+	# while the pinned upstream checkout remains unchanged.
+	set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+		"${hde64_SOURCE_DIR}/src/hde/hde64.c"
+	)
+	file(READ "${hde64_SOURCE_DIR}/src/hde/hde64.c" _hde64_source)
+	set(_hde64_declaration "uint8_t x, c, *p")
+	string(FIND "${_hde64_source}" "${_hde64_declaration}" _hde64_declaration_offset)
+	if(_hde64_declaration_offset EQUAL -1)
+		message(FATAL_ERROR "Unexpected hde64 byte declaration; update the initialization fix.")
+	endif()
+	string(REPLACE "${_hde64_declaration}" "uint8_t x, c = 0, *p" _hde64_source "${_hde64_source}")
+	set(_hde64_compilation_source "${CMAKE_CURRENT_BINARY_DIR}/generated/hde64.c")
+	file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/generated")
+	file(CONFIGURE OUTPUT "${_hde64_compilation_source}" CONTENT "${_hde64_source}" @ONLY)
 endif()
 
 source_group(
@@ -255,13 +271,12 @@ if(SKSE_SUPPORT_PATCH_SAFETY)
 	# hde64.h is only ever included from Trampoline.cpp -- the check never appears in a
 	# public header, so PRIVATE keeps the vendored dependency off every downstream
 	# consumer's include path.
-	target_sources("${PROJECT_NAME}" PRIVATE "${hde64_SOURCE_DIR}/src/hde/hde64.c")
+	target_sources("${PROJECT_NAME}" PRIVATE "${_hde64_compilation_source}")
 	target_include_directories("${PROJECT_NAME}" PRIVATE "${hde64_SOURCE_DIR}/src/hde")
-	# VS doesn't reliably infer hde64.c's LANGUAGE without this (silent <None>, fails only
-	# at link time); a vendored C file also can't use our C++ precompiled header, and /WX-
-	# keeps its own warnings from becoming errors without touching the file itself.
+	# VS needs an explicit C language, and the decoder cannot use the C++ PCH.
+	# Keep third-party diagnostics separate from the library's warning policy.
 	set_source_files_properties(
-		"${hde64_SOURCE_DIR}/src/hde/hde64.c" PROPERTIES
+		"${_hde64_compilation_source}" PROPERTIES
 		LANGUAGE C
 		SKIP_PRECOMPILE_HEADERS ON
 		COMPILE_OPTIONS "$<$<CXX_COMPILER_ID:MSVC>:/WX->"
