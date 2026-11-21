@@ -63,6 +63,7 @@ namespace REX::W32
 		REX_W32_PAIR(::ID3D11Texture2D*, ID3D11Texture2D*)
 		REX_W32_PAIR(::ID3D11ShaderResourceView*, ID3D11ShaderResourceView*)
 		REX_W32_PAIR(::ID3D11RenderTargetView*, ID3D11RenderTargetView*)
+		REX_W32_PAIR(::ID3D11DepthStencilView*, ID3D11DepthStencilView*)
 		REX_W32_PAIR(::ID3D11UnorderedAccessView*, ID3D11UnorderedAccessView*)
 		REX_W32_PAIR(::ID3D11VertexShader*, ID3D11VertexShader*)
 		REX_W32_PAIR(::ID3D11PixelShader*, ID3D11PixelShader*)

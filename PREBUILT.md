@@ -9,6 +9,11 @@ the same config below. They are produced and self-tested by
 Both build systems **auto-fetch** their bundle on a clean release tag (see the auto-fetch
 sections), so in the common case you change nothing in your repo.
 
+CMake consumers that require fork-specific source changes should set
+`COMMONLIB_BUILD_FROM_SOURCE=ON` before adding CommonLib. This takes precedence
+over `COMMONLIB_PREBUILT_DIR`, cached bundles and automatic downloads. It keeps
+the compiled library and public headers on the checked-out revision.
+
 ## What's in the xmake bundle
 
 `commonlibsse-ng-prebuilt-<tag>-all-msvc.7z` is a drop-in replacement for the

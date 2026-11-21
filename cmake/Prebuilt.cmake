@@ -95,8 +95,15 @@ function(_commonlib_prebuilt_toolset_compatible dir out_var)
     set(${out_var} TRUE PARENT_SCOPE)
 endfunction()
 
+option(COMMONLIB_BUILD_FROM_SOURCE "Build the checked-out sources even when a prebuilt bundle is available." OFF)
+
 function(commonlib_resolve_prebuilt out_dir)
     set(${out_dir} "" PARENT_SCOPE)
+
+    # Fork-specific fixes require the checked-out sources, including with explicit overrides.
+    if(COMMONLIB_BUILD_FROM_SOURCE)
+        return()
+    endif()
 
     # Auto-fetch only makes sense for add_subdirectory consumers. When CommonLibSSE is the
     # top-level project (developing or releasing CommonLib itself, including the bundle
