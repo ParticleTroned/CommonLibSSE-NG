@@ -5,6 +5,9 @@
 #include "REX/W32/D3D11.h"
 #include "REX/W32/DXGI.h"
 
+// Resolve SDK DXGI before d3d11.h's quoted include can select REX's DXGI.h.
+#include <dxgi.h>
+
 #include <DirectXMath.h>
 #include <d3d11.h>
 #include <type_traits>
