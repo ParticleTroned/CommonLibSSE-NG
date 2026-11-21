@@ -61,7 +61,7 @@ namespace RE
 		float                          specularColorScale = 1.f;                // 8C
 		float                          subSurfaceLightRolloff = 0.f;            // 90
 		float                          rimLightPower = 0.f;                     // 94
-		volatile mutable std::uint32_t textureSetLock;                          // 98 - spin lock used in OnLoadTextureSet
+		volatile mutable std::uint32_t textureSetLock{ 0 };                     // 98 - spin lock used in OnLoadTextureSet
 		std::uint32_t                  pad9C;                                   // 9C
 
 	protected:
