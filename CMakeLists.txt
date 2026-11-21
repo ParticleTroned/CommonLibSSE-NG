@@ -24,7 +24,7 @@ endif()
 project(
 	CommonLibSSE
 	LANGUAGES CXX
-	VERSION 16.10.0
+	VERSION 1.0.0
 )
 
 include(CheckIPOSupported)
