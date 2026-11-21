@@ -3,6 +3,7 @@
 #include "RE/B/BSTArray.h"
 #include "RE/B/BSTSingleton.h"
 #include "RE/B/BSTSmartPointer.h"
+#include "RE/C/CrosshairPickData.h"
 #include "RE/E/ExtraDataList.h"
 #include "RE/I/InterfaceLightSchemes.h"
 #include "RE/M/MenuEventHandler.h"
@@ -68,8 +69,8 @@ namespace RE
 		void LoadInventoryItem(InventoryEntryData* a_objDesc);
 		void LoadInventoryItem(TESBoundObject* a_object, ExtraDataList* a_extraDataList);
 		void Render();
-		bool ToggleItemZoom();
-		void UnloadInventoryItem();
+		bool ToggleItemZoom(VR_DEVICE a_device = VR_DEVICE::kTotal);
+		void UnloadInventoryItem();  // hides the current model and cancels a pending load
 
 		struct RUNTIME_DATA
 		{
@@ -91,15 +92,25 @@ namespace RE
 		/// Returns the flat preview layout, or nullptr in VR.
 		SE_ONLY_POINTER_ACCESSOR(RUNTIME_DATA, GetRuntimeData,
 			REL::Module::IsAtLeast(SKSE::RUNTIME_SSE_1_6_629) ? 0x60 : 0x58);
-		// Only the independently confirmed array prefix is modeled here. The
-		// flat RUNTIME_DATA is not a valid view of VR's preview models: its size
-		// field lands inside a VR entry instead of at manager +0x258.
+		// VR adds its own state after the array; the flat view cannot describe it.
 		struct VR_RUNTIME_DATA
 		{
-			BSTSmallArray<LoadedInventoryModelVR, 7> loadedModels;  // 058
+			BSTSmallArray<LoadedInventoryModelVR, 7>      loadedModels;     // 058
+			float                                         zoomDistance;     // 260
+			float                                         zoomProgress;     // 264
+			BSTSmartPointer<NewInventoryMenuItemLoadTask> loadTask;         // 268
+			bool                                          enableUserInput;  // 270
+			std::uint8_t                                  unk271;           // 271
+			bool                                          startedZoom;      // 272
+			std::uint8_t                                  pad273;           // 273
+			std::uint32_t                                 pad274;           // 274
+			void*                                         unk278;           // 278 - refcounted; released by the destructor
+			std::uint32_t                                 unk280;           // 280
+			float                                         unk284[2];        // 284
+			std::uint32_t                                 pad28C;           // 28C
 		};
-		static_assert(sizeof(VR_RUNTIME_DATA) == 0x208);
-		/// Returns the confirmed VR array prefix, or nullptr in SE/AE.
+		static_assert(sizeof(VR_RUNTIME_DATA) == 0x238);
+		/// Returns the VR preview layout, or nullptr in SE/AE.
 		VR_ONLY_POINTER_ACCESSOR(VR_RUNTIME_DATA, GetVRRuntimeData, 0x58);
 		// members
 		std::uint8_t           unk011;              // 011
@@ -112,18 +123,19 @@ namespace RE
 		TESObjectREFR*         tempRef;             // 038
 		ExtraDataList          originalExtra;       // 040
 
-#ifdef EXCLUSIVE_SKYRIM_SE
-		RUNTIME_DATA_CONTENT;
+#if defined(EXCLUSIVE_SKYRIM_VR)
+		VR_RUNTIME_DATA vrRuntimeData;  // 058
+#elif defined(EXCLUSIVE_SKYRIM_SE) || defined(EXCLUSIVE_SKYRIM_AE)
+		RUNTIME_DATA_CONTENT;  // 058, or 060 on AE where ExtraDataList is 0x20
 #endif
 	};
-#ifdef EXCLUSIVE_SKYRIM_SE
-	static_assert(sizeof(Inventory3DManager) == 0x160);
-#elif defined(EXCLUSIVE_SKYRIM_VR)
-	static_assert(sizeof(Inventory3DManager) == 0x58);
+#if defined(EXCLUSIVE_SKYRIM_VR)
+	static_assert(sizeof(Inventory3DManager) == 0x290);
 #elif defined(EXCLUSIVE_SKYRIM_AE)
-	static_assert(sizeof(Inventory3DManager) == 0x60);
+	static_assert(sizeof(Inventory3DManager) == 0x168);
+#elif defined(EXCLUSIVE_SKYRIM_SE)
+	static_assert(sizeof(Inventory3DManager) == 0x160);
 #endif
-	static_assert(offsetof(Inventory3DManager, originalExtra) == 0x40);
 }
 #undef RUNTIME_DATA
 #undef RUNTIME_DATA_CONTENT

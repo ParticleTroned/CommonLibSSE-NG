@@ -99,9 +99,10 @@ namespace RE
 		std::uint8_t                                            unkB1;                  // B1
 		std::uint8_t                                            unkB2;                  // B2
 		std::uint8_t                                            unkB3;                  // B3
-		std::uint32_t                                           isShuttingDown;         // 1 if scene is actually shutting down
+		bool                                                    isShuttingDown;         // B4 - byte flag, set while the scene is shutting down
+		std::uint8_t                                            padB5[3];               // B5
 		std::uint32_t                                           unkB8;                  // B8
-		std::uint32_t                                           currentPhaseIndex;      // -1 if scene is not playing, starting with 1
+		std::uint32_t                                           currentPhaseIndex;      // BC - -1 when not playing, 0 on start, incremented per phase
 		std::uint32_t                                           unkC0;                  // C0
 		std::uint32_t                                           padC4;                  // C4
 	};

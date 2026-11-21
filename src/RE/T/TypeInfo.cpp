@@ -81,11 +81,8 @@ namespace RE
 		ObjectTypeInfo* TypeInfo::GetTypeInfo() const
 		{
 			assert(IsObject() || IsObjectArray());
-			if (IsObject()) {
-				return reinterpret_cast<ObjectTypeInfo*>(std::to_underlying(GetRawType()) & ~std::to_underlying(RawType::kObject));
-			} else {
-				return reinterpret_cast<ObjectTypeInfo*>(std::to_underlying(GetRawType()) & ~std::to_underlying(RawType::kObjectArray));
-			}
+			// class types are the ObjectTypeInfo pointer itself, bit 0 is the array flag
+			return reinterpret_cast<ObjectTypeInfo*>(std::to_underlying(GetRawType()) & ~std::to_underlying(RawType::kObject));
 		}
 
 		auto TypeInfo::GetUnmangledRawType() const
@@ -158,40 +155,55 @@ namespace RE
 
 		std::string TypeInfo::TypeAsString() const
 		{
+			constexpr auto badTypeName = "<bad type>";
+
 			switch (GetUnmangledRawType()) {
 			case RawType::kNone:
-				return "none";
+				return "None";
 			case RawType::kString:
-				return "string";
+				return "String";
 			case RawType::kInt:
-				return "int";
+				return "Int";
 			case RawType::kFloat:
-				return "float";
+				return "Float";
 			case RawType::kBool:
-				return "bool";
+				return "Bool";
 			case RawType::kObject:
 				{
 					auto info = GetTypeInfo();
-					return info ? info->name.c_str() : "none";
+					return info ? info->name.c_str() : badTypeName;
 				}
 			case RawType::kNoneArray:
-				return "none";
+				return badTypeName;
 			case RawType::kObjectArray:
 				{
 					auto info = GetTypeInfo();
-					return info ? std::string(info->name.c_str()) + "[]" : "none";
+					return info ? std::string(info->name.c_str()) + "[]" : badTypeName;
 				}
 			case RawType::kStringArray:
-				return "string[]";
+				return "String[]";
 			case RawType::kIntArray:
-				return "int[]";
+				return "Int[]";
 			case RawType::kFloatArray:
-				return "float[]";
+				return "Float[]";
 			case RawType::kBoolArray:
-				return "bool[]";
+				return "Bool[]";
 			default:
-				return "";
+				return badTypeName;
 			}
+		}
+
+		TypeInfo TypeInfo::GetElementTypeOfArray() const
+		{
+			assert(IsArray());
+			if (IsLiteralArray()) {
+				return TypeInfo(static_cast<RawType>(_rawType.underlying() - 0xA));
+			}
+			if (IsObjectArray()) {
+				constexpr auto arrayBitMask = ~static_cast<long long>(1);
+				return TypeInfo(static_cast<RawType>(_rawType.underlying() & arrayBitMask));
+			}
+			return {};
 		}
 
 		void TypeInfo::SetType(RawType a_type)

@@ -3,14 +3,17 @@
 #include "RE/B/BSLight.h"
 #include "RE/B/BSShaderRenderTargets.h"
 #include "RE/N/NiFrustumPlanes.h"
+#include "RE/N/NiPoint3.h"
 #include "RE/N/NiRect.h"
 
+#include "REL/Relocation.h"
 #include "REL/RuntimeDataAccessors.h"
 #include "REX/W32/D3D.h"
 
 namespace RE
 {
 	class BSShaderAccumulator;
+	class Actor;
 	class NiCamera;
 
 	class BSShadowLight : public BSLight
@@ -130,6 +133,13 @@ namespace RE
 
 		RUNTIME_DATA_ACCESSOR(RUNTIME_DATA, 0x148, 0x148);
 		RUNTIME_DATA_ACCESSOR_EX(RUNTIME_DATA_VR, GetVRRuntimeData, 0x148, 0x148);
+		[[nodiscard]] static bool IsLightAffectingActor(BSShadowLight* a_light, Actor* a_actor, const NiPoint3* a_position)
+		{
+			using func_t = bool (*)(void*, BSShadowLight*, Actor*, const NiPoint3*);
+			static REL::Relocation<func_t> func{ RELOCATION_ID(41661, 42744) };
+			// The engine ignores its first argument on all supported runtimes.
+			return func(nullptr, a_light, a_actor, a_position);
+		}
 		// members
 		std::uint32_t shadowMapCount;  // 140
 		std::uint32_t unk144;          // 144

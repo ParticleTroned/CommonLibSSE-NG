@@ -1,10 +1,14 @@
 #pragma once
 
+#include <cstddef>
+
 #include "RE/B/BSShader.h"
 #include "RE/B/BSShaderRenderTargets.h"
 #include "RE/N/NiTexture.h"
 #include "RE/R/RenderTargetData.h"
+#include "RE/R/RenderTargetProperties.h"
 #include "RE/T/TextureFileFormat.h"
+#include "RE/V/VertexDesc.h"
 #include <SKSE/Version.h>
 
 #include "REL/RuntimeDataAccessors.h"
@@ -13,8 +17,13 @@
 
 namespace RE
 {
+	class BSShaderAccumulator;
+	class NiCamera;
+
 	namespace BSGraphics
 	{
+		enum SetRenderTargetMode : std::uint32_t;
+
 		struct RendererWindow
 		{
 		public:
@@ -34,6 +43,8 @@ namespace RE
 			std::uint64_t                        unk48;                  // 48
 		};
 		static_assert(sizeof(RendererWindow) == 0x50);
+		struct TriShape;
+		struct VertexBuffer;
 
 		struct RendererData2
 		{
@@ -167,7 +178,95 @@ namespace RE
 
 			RUNTIME_MEMBER_ACCESSOR_VERSIONED(REX::W32::CRITICAL_SECTION, GetLock, SKSE::RUNTIME_SSE_1_6_1130, 0x2790, 0x2F00, 0x27f0);
 
-			[[nodiscard]] static Renderer* GetSingleton() noexcept;
+			/**
+			 * @brief Refreshes camera-dependent renderer state.
+			 * @param a_flags Gates optional updates (bits 0x2, 0x4, 0x80); the engine render path passes 0.
+			 */
+			void UpdateCameraData(std::uint32_t a_flags);
+
+			[[nodiscard]] static Renderer*                         GetSingleton() noexcept;
+			[[nodiscard]] static bool&                             GetVolumetricLightingEnabled() noexcept;
+			[[nodiscard]] static REX::W32::ID3D11RasterizerState** GetRasterizerStates() noexcept
+			{
+				static REL::Relocation<REX::W32::ID3D11RasterizerState**> states{ RELOCATION_ID(524748, 411363) };
+				return states.get();
+			}
+			[[nodiscard]] static REX::W32::ID3D11BlendState** GetBlendStates() noexcept
+			{
+				static REL::Relocation<REX::W32::ID3D11BlendState**> states{ RELOCATION_ID(524749, 411364) };
+				return states.get();
+			}
+			[[nodiscard]] static REX::W32::ID3D11Buffer** GetVertexShaderPerTechniqueBuffers() noexcept
+			{
+				static REL::Relocation<REX::W32::ID3D11Buffer**> buffers{ RELOCATION_ID(524755, 411371) };
+				return buffers.get();
+			}
+			[[nodiscard]] static REX::W32::ID3D11Buffer** GetVertexShaderPerMaterialBuffers() noexcept
+			{
+				static REL::Relocation<REX::W32::ID3D11Buffer**> buffers{ RELOCATION_ID(524757, 411373) };
+				return buffers.get();
+			}
+			[[nodiscard]] static REX::W32::ID3D11Buffer** GetVertexShaderPerGeometryBuffers() noexcept
+			{
+				static REL::Relocation<REX::W32::ID3D11Buffer**> buffers{ RELOCATION_ID(524759, 411375) };
+				return buffers.get();
+			}
+			[[nodiscard]] static REX::W32::ID3D11Buffer** GetPixelShaderPerTechniqueBuffers() noexcept
+			{
+				static REL::Relocation<REX::W32::ID3D11Buffer**> buffers{ RELOCATION_ID(524761, 411377) };
+				return buffers.get();
+			}
+			[[nodiscard]] static REX::W32::ID3D11Buffer** GetPixelShaderPerMaterialBuffers() noexcept
+			{
+				static REL::Relocation<REX::W32::ID3D11Buffer**> buffers{ RELOCATION_ID(524763, 411379) };
+				return buffers.get();
+			}
+			[[nodiscard]] static REX::W32::ID3D11Buffer** GetPixelShaderPerGeometryBuffers() noexcept
+			{
+				static REL::Relocation<REX::W32::ID3D11Buffer**> buffers{ RELOCATION_ID(524765, 411381) };
+				return buffers.get();
+			}
+			[[nodiscard]] static REX::W32::ID3D11Buffer* GetPerFrameBuffer() noexcept
+			{
+				static REL::Relocation<REX::W32::ID3D11Buffer**> buffer{ RELOCATION_ID(524768, 411384) };
+				return *buffer;
+			}
+			[[nodiscard]] static std::byte* GetVertexShaderBufferData() noexcept
+			{
+				static REL::Relocation<std::byte*> data{ RELOCATION_ID(524965, 411446) };
+				return data.get();
+			}
+			[[nodiscard]] static std::byte* GetPixelShaderBufferData() noexcept
+			{
+				static REL::Relocation<std::byte*> data{ RELOCATION_ID(524967, 411448) };
+				return data.get();
+			}
+			[[nodiscard]] static REX::W32::ID3D11Buffer* GetVRRenderDataBuffer() noexcept
+			{
+				if (!REL::Module::IsVR()) {
+					return nullptr;
+				}
+				static REL::Relocation<REX::W32::ID3D11Buffer**> buffer{ REL::Offset(0x3180688) };
+				return *buffer;
+			}
+			[[nodiscard]] static bool& GetVRDepthBufferCullingEnabled() noexcept
+			{
+				if (REL::Module::IsVR()) {
+					static REL::Relocation<bool*> enabled{ REL::Offset(0x1ec6b88) };
+					return *enabled;
+				}
+				static bool dummy = false;
+				return dummy;
+			}
+			[[nodiscard]] static float& GetVRMinOccludeeBoxExtent() noexcept
+			{
+				if (REL::Module::IsVR()) {
+					static REL::Relocation<float*> extent{ REL::Offset(0x1ed64e8) };
+					return *extent;
+				}
+				static float dummy = 0.0F;
+				return dummy;
+			}
 
 			// VR only: global bool controlling stereo geometry shader instancing.
 			// Shadow rendering clears this to prevent quadrant artifacts (each hemisphere doubled).
@@ -175,24 +274,31 @@ namespace RE
 			[[nodiscard]] static bool& GetDrawStereo() noexcept
 			{
 				if (REL::Module::IsVR()) {
-					static auto addr = REL::Offset(0x3181708).address();
-					return *reinterpret_cast<bool*>(addr);
+					static REL::Relocation<bool*> drawStereo{ REL::Offset(0x3181708) };
+					return *drawStereo;
 				}
 				static bool dummy = false;
 				return dummy;
 			}
 
-			void CreateSwapChain(REX::W32::HWND* a_window, bool a_setCurrent);
-			void KillWindow(std::uint32_t a_windowID);
-			void Lock();
-			void Unlock();
-			void ResizeWindow(std::uint32_t a_windowID, std::uint32_t a_width, std::uint32_t a_height, bool a_fullscreen, bool a_borderless);
-			void RequestWindowResize(std::uint32_t a_width, std::uint32_t a_height);
-			void SetWindowPosition(std::uint32_t a_windowID, std::int32_t a_x, std::int32_t a_y);
-			void SetWindowActiveState(bool a_show);
-			void WindowSizeChanged(std::uint32_t a_windowID);
-			void ResetWindow(std::uint32_t a_windowID);
-			void UpdateViewPort(std::uint32_t a_unk1, std::uint32_t a_unk2, bool a_unk3);
+			void                                   CreateSwapChain(REX::W32::HWND* a_window, bool a_setCurrent);
+			void                                   KillWindow(std::uint32_t a_windowID);
+			void                                   Lock();
+			void                                   Unlock();
+			void                                   ResizeWindow(std::uint32_t a_windowID, std::uint32_t a_width, std::uint32_t a_height, bool a_fullscreen, bool a_borderless);
+			void                                   RequestWindowResize(std::uint32_t a_width, std::uint32_t a_height);
+			void                                   SetWindowPosition(std::uint32_t a_windowID, std::int32_t a_x, std::int32_t a_y);
+			void                                   SetWindowActiveState(bool a_show);
+			void                                   WindowSizeChanged(std::uint32_t a_windowID);
+			void                                   ResetWindow(std::uint32_t a_windowID);
+			void                                   SetRenderTarget(std::uint32_t a_renderTargetSlot, RENDER_TARGET a_renderTarget, SetRenderTargetMode a_mode, bool a_updateViewport);
+			void                                   UpdateViewPort(std::uint32_t a_unk1, std::uint32_t a_unk2, bool a_unk3);
+			[[nodiscard]] REX::W32::ID3D11Buffer** GetID3D11Resource(std::uint64_t a_bufferType, std::uint32_t** a_outIndex, std::uint32_t a_bufferKind);
+			void                                   DrawIndexedInstancedTriangles(TriShape* a_buffers, std::uint32_t a_startIndex, std::int32_t a_triangleCount, std::int32_t a_instanceCount, VertexDesc a_vertexDesc, VertexBuffer* a_secondaryStream);
+			void                                   ApplyState(bool a_arg2);
+			static void                            SubmitAccumulator(NiCamera* a_camera, BSShaderAccumulator* a_accumulator, std::uint32_t a_renderFlags);
+			static void                            StartAccumulating(NiCamera* a_camera, BSShaderAccumulator* a_accumulator, std::uint32_t a_renderFlags);
+			static void                            FinishAccumulatingPostResolveDepth(NiCamera* a_unusedCamera, BSShaderAccumulator* a_accumulator, std::uint32_t a_renderFlags);
 
 			[[nodiscard]] NiTexture::RendererData* CreateRenderTexture(std::uint32_t a_width, std::uint32_t a_height);
 			void                                   SaveRenderTargetToFile(RENDER_TARGET a_renderTarget, const char* a_filePath, TextureFileFormat a_textureFileFormat);
@@ -227,6 +333,8 @@ namespace RE
 			void Shutdown();
 		};
 		STATIC_ASSERT_SIZE(Renderer, 0x21C8, 0x21C8, 0x1FC0);
+
+		void SetDirtyStates(bool a_isCompute);
 	}
 }
 #undef RUNTIME_DATA_CONTENT

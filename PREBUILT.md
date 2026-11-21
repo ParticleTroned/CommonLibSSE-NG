@@ -33,6 +33,7 @@ The library is compiled **once**, for the config our xmake consumers use:
 | Runtime | **all** — `skyrim_se` + `skyrim_ae` + `skyrim_vr` |
 | REX | **`rex_ini` + `rex_json` + `rex_toml`** on (the full superset) |
 | Trampoline | **`skse_xbyak`** on |
+| Patch diagnostics | **`skse_patch_safety`** on |
 | Build | `releasedbg`, x64, **MSVC** |
 | C++ | C++23 |
 
@@ -42,19 +43,20 @@ consumer **must** build with a compatible setup:
 - Compatible options: keep the `skyrim_*` runtimes **all on** (they default on and are the
   one layout-critical axis — disabling a runtime is **not** served, build from source). Every
   REX config (`rex_ini`/`rex_json`/`rex_toml`) and `skse_xbyak` is additive and **all baked**,
-  so newly produced bundles contain those symbols. The xmake resolver conservatively
-  requires a source build for `rex_json` or `rex_toml` to support older bundles that
-  omitted them; `rex_ini` and `skse_xbyak` remain optional.
+  so the lib is a full superset: a consumer may enable any combination (or none) and still
+  link — the symbols are present regardless.
 - Same mode/ABI: xmake `releasedbg` (release CRT `/MD`, `NDEBUG`). No `debug` bundle
   is published. A true `debug` build must compile from source.
+- Patch diagnostics are compiled into the bundle. To disable them with
+  `--skse_patch_safety=n`, build CommonLib from source.
 - Same compiler family (**MSVC**) and a compatible MSVC toolset version. Toolset drift
   between this bundle and the consumer is the most common cause of link/ABI errors.
-  Both resolvers reject a foreign compiler family: the compilers can disagree on
-  inline STL return conventions, allowing a successful link followed by corruption.
-  xmake checks the selected C++ compiler, including command-line overrides, and
-  only accepts MSVC's `cl`. Other compilers need a full source checkout with
-  submodules; a binary-only xmake bundle cannot provide that fallback. The resolver
-  also requires x64, `releasedbg`, the `MD` runtime and all Skyrim runtimes enabled.
+  A bundle is only linked by a consumer of the same compiler family: objects from MSVC and from
+  clang-cl disagree on how inline STL functions return small structs (`std::strong_ordering`),
+  which links fine and then corrupts memory at runtime. The cmake release publishes both
+  `...-all-msvc-cmake.zip` and `...-all-clangcl-cmake.zip` (built without IPO, so it holds plain
+  object code; it must match the consumer's clang major.minor). Each bundle names its family in
+  `TOOLCHAIN_ID.txt`; an unstamped bundle is MSVC. Any other compiler builds CommonLib from source.
 
 ## How to consume (xmake)
 
@@ -87,12 +89,12 @@ plugin whose `lib/commonlibsse-ng` submodule sits on `vX.Y.Z` gets the prebuilt 
 on CI, with zero changes to its repo.
 
 It falls back to a normal **source build** whenever the prebuilt can't be used safely:
-not on an exact tag, a dirty submodule, a missing/unverified asset, or no network.
-Compiler or configuration mismatches use a source build before downloading a bundle.
-The download is cached under `build/.prebuilt/<tag>` and attempted at most
+not on an exact tag, a dirty submodule, a missing/unverified asset, or no network. Once
+fetched, a disabled runtime (an ABI-incompatible header layout) is refused so it can't
+silently mislink. The download is cached under `build/.prebuilt/<tag>` and attempted at most
 once per tag. Local dev builds stay source-by-default (set `COMMONLIB_PREBUILT=1` to opt in).
-The prebuilt consumer needs the `skyrim_*` runtimes on and `rex_json`/`rex_toml` off;
-`rex_ini` and `skse_xbyak` are optional.
+The consumer only needs the `skyrim_*` runtimes on (the default); `rex_ini`/`rex_json`/
+`rex_toml`/`skse_xbyak` are all optional (the lib bakes them all).
 
 ## Size & cost
 
@@ -145,30 +147,25 @@ top-level project is CommonLib itself (you only auto-fetch when *consumed*), a D
 multi-config build (the bundle is Release `/MD`; a Debug `/MDd` link would be an ABI
 mismatch), a **static-CRT** consumer (`/MT` / the `x64-windows-static` triplet — the bundle
 is `/MD`, so the CRTs would collide), not on an exact tag, a dirty tree, options that don't
-match the baked config, a missing/unverified asset, an unsupported or different
-compiler family, or a different compiler major.minor version (see below).
+match the baked config, a missing/unverified asset, or a **different MSVC toolset** than the
+one that produced the bundle (see below).
 
 A CRT/config match doesn't guarantee the bundle links: its objects may reference MSVC STL
 internal dispatch helpers (e.g. `__std_replace_copy_2`) that only exist in the import libs of
 a specific toolset/SDK vintage — not part of the stable ABI, so a toolset mismatch in either
 direction can hit a deep `LNK2001` at final link that a CRT/config check can't predict. The
-bundle carries a `TOOLSET_VERSION.txt` stamp for its producing compiler. An optional
-`TOOLCHAIN_ID.txt` identifies `msvc` or `clangcl`; historical bundles without that
-stamp are MSVC. `Prebuilt.cmake` requires the same compiler family and
-**major.minor** version, including explicitly supplied clang-cl bundles. Mismatches,
-unsupported families, malformed stamps and unavailable consumer versions fall
-back to source with a `STATUS` message. An exact patch/build match would over-trigger
-on ordinary servicing updates that change nothing relevant. This only protects against
+bundle carries a `TOOLSET_VERSION.txt` stamp (the producing `cl.exe` version); `Prebuilt.cmake`
+rejects the bundle — falling back to source, with a `STATUS` message — unless the consumer's
+toolset shares the same **major.minor** version (an exact patch/build match would over-trigger
+on ordinary servicing updates that change nothing relevant). This only protects against
 version *drift*, not a preview/Insiders channel that has genuinely dropped or not-yet-added a
-given internal symbol at the same nominal version. Historical MSVC bundles without
-either stamp retain the legacy compatibility fallback; a bundle carrying a
-compiler-family stamp must also supply a valid version stamp. Automatic downloads
-remain MSVC-only.
-
-Explicit `COMMONLIB_PREBUILT_DIR` overrides obey the same runtime-layout and
-configuration checks. The CRT must be unset (CMake's dynamic default),
-`MultiThreadedDLL`, or `MultiThreaded$<$<CONFIG:Debug>:Debug>DLL`. Other expressions
-fall back to source because their release CRT cannot be proven compatible here.
+given internal symbol at the same nominal version — that residual case still needs a manual
+`-DCOMMONLIB_PREBUILT=OFF`. Only historical MSVC bundles without either compiler stamp retain their
+compatibility fallback. Modern bundles require valid compiler-family and version
+stamps; missing, malformed or mismatched metadata selects a source build. The
+consumer must also use a supported compiler and a known release dynamic CRT
+selection. These checks apply to explicit bundle overrides and cached bundles
+as well as automatic downloads.
 
 A **multi-config generator** (Visual Studio) is skipped by default because the config is
 chosen at build time, so Debug can't be ruled out. A consumer that only ever builds

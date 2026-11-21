@@ -23,8 +23,8 @@ namespace RE
 
 		static HighActorCuller* GetSingleton()
 		{
-			static REL::Relocation<HighActorCuller**> singleton{ RELOCATION_ID(517032, 403540) };
-			return *singleton;
+			static REL::Relocation<HighActorCuller*> singleton{ RELOCATION_ID(517032, 403540) };
+			return singleton.get();
 		}
 
 		// members

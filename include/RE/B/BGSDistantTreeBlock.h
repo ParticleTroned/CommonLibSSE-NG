@@ -8,10 +8,16 @@ namespace RE
 {
 	class BGSTerrainNode;
 	class BSMultiStreamInstanceTriShape;
+	class BSTriShape;
+	class NiAlphaProperty;
+	class NiTexture;
 
 	class BGSDistantTreeBlock
 	{
 	public:
+		BGSDistantTreeBlock(BGSTerrainNode* a_node, std::uint32_t a_LODLevel);
+		~BGSDistantTreeBlock() = default;
+
 		struct InstanceData
 		{
 		public:
@@ -42,6 +48,29 @@ namespace RE
 		};
 		static_assert(sizeof(TreeGroup) == 0x28);
 
+		struct TreeType
+		{
+		public:
+			// members
+			std::uint32_t         index;      // 00 - .lst file
+			float                 width;      // 04 - .lst file
+			float                 height;     // 08 - .lst file
+			float                 uvMinX;     // 0C - .lst file
+			float                 uvMinY;     // 10 - .lst file
+			float                 uvMaxX;     // 14 - .lst file
+			float                 uvMaxY;     // 18 - .lst file
+			std::uint32_t         unk1C;      // 1C - .lst file, unused
+			NiPointer<BSTriShape> treeModel;  // 20 - created with data above
+		};
+		static_assert(sizeof(TreeType) == 0x28);
+
+		static NiPointer<NiTexture>&       GetAtlasTexture();
+		static NiPointer<NiAlphaProperty>& GetSharedAlpha();
+		static BSTArray<TreeType>&         GetTreeTypes();
+
+		void Attach();
+		void Detach();
+
 		// members
 		BSTArray<TreeGroup*>                     treeGroups;   // 00
 		BSTHashMap<std::uint32_t, InstanceData*> instanceMap;  // 18
@@ -52,6 +81,9 @@ namespace RE
 		bool                                     allVisible;   // 82
 		std::uint8_t                             pad83;        // 83
 		std::uint32_t                            pad84;        // 84
+
+	private:
+		BGSDistantTreeBlock* Ctor(BGSTerrainNode* a_node, std::uint32_t a_LODLevel);
 	};
 	static_assert(sizeof(BGSDistantTreeBlock) == 0x88);
 }

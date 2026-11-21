@@ -5,6 +5,7 @@
 #include "RE/B/BSTArray.h"
 #include "RE/M/MemoryManager.h"
 #include "RE/N/NiColor.h"
+#include "REL/Relocation.h"
 
 namespace RE
 {
@@ -49,6 +50,12 @@ namespace RE
 
 		void CopyMembers(BSLightingShaderProperty* a_other);
 		void InvalidateTextures(std::uint32_t a_unk1);
+		bool IsValidLight(BSLight* a_light)
+		{
+			using func_t = bool (*)(BSLightingShaderProperty*, BSLight*);
+			static REL::Relocation<func_t> func{ RELOCATION_ID(98902, 105550) };
+			return func(this, a_light);
+		}
 
 		// Engine's own CreateClone allocates kSizeVR on VR, not sizeof(this).
 		inline static constexpr std::size_t kSizeFlat = 0x160;
@@ -81,11 +88,13 @@ namespace RE
 		float                     forcedDarkness;                 // 0FC - unused
 		float                     specularLODFade;                // 100
 		float                     envmapLODFade;                  // 104
-		std::uint32_t             unk108;                         // 108
+		float                     unk108;                         // 108
 		NiColorA                  projectedUVParams;              // 10C
 		NiColorA                  projectedUVColor;               // 11C
-		std::int32_t              unk12C;                         // 12C
-		std::uint32_t             unk130;                         // 130
+		std::int32_t              unk12C;                         // 12C - initialized to -1
+		std::uint8_t              pad130[2];                      // 130
+		std::uint8_t              arrayQueueWriteIndex;           // 132
+		std::uint8_t              arrayQueueReadIndex;            // 133
 		std::uint32_t             unk134;                         // 134
 		BSShaderPropertyLightData lightingLightData;              // 138
 #if defined(EXCLUSIVE_SKYRIM_VR)

@@ -118,7 +118,7 @@ namespace RE
 			std::uint8_t                                precipitationEndFadeOut;      // 07
 			std::uint8_t                                thunderLightningBeginFadeIn;  // 08
 			std::uint8_t                                thunderLightningEndFadeOut;   // 09
-			std::int8_t                                 thunderLightningFrequency;    // 0A
+			std::uint8_t                                thunderLightningFrequency;    // 0A
 			REX::EnumSet<WeatherDataFlag, std::uint8_t> flags;                        // 0B
 			Color3                                      lightningColor;               // 0C
 			std::uint8_t                                visualEffectBegin;            // 0F

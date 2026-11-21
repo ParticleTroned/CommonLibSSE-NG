@@ -21,6 +21,7 @@ namespace RE
 	class MapTouchpadHandler;
 	class MapZoomHandler;
 	class MenuOpenCloseEvent;
+	class NiAVObject;
 	class TESWorldSpace;
 
 	// menuDepth = 3
@@ -28,9 +29,9 @@ namespace RE
 	// context = kMap
 	class MapMenu :
 #if defined(EXCLUSIVE_SKYRIM_VR)
-		public WorldSpaceMenu,                    // 00000
-		public BSTEventSink<MenuOpenCloseEvent>,  // 00058
-		public IMapCameraCallbacks                // 00060
+		// VR has no IMapCameraCallbacks base; its members start at 0x60.
+		public WorldSpaceMenu,                   // 00000
+		public BSTEventSink<MenuOpenCloseEvent>  // 00058
 #elif !defined(ENABLE_SKYRIM_VR)
 		public IMenu,                             // 00000
 		public BSTEventSink<MenuOpenCloseEvent>,  // 00030
@@ -93,22 +94,31 @@ namespace RE
 
 		struct RUNTIME_DATA2
 		{
-#define RUNTIME_DATA2_CONTENT                     \
-	COMMON_MAP_DATA2_CONTENT                      \
-	MapCamera      camera;              /* 040 */ \
-	std::uint64_t  unk30530;            /* 0D0 */ \
-	TESWorldSpace* worldSpace;          /* 0D8 */ \
-	GFxValue       mapMovie;            /* 0E0 */ \
-	std::int32_t   selectedMarker;      /* 0F8 */ \
-	NiPoint3       cameraPickOrigin;    /* 0FC */ \
-	NiPoint3       cameraPickDirection; /* 108 */ \
-	BSSoundHandle  unk30574;            /* 114 */ \
-	std::uint64_t  unk30580;            /* 120 */ \
-	std::uint32_t  unk30588;            /* 128 */ \
-	bool           controlsReady;       /* 12C */ \
-	std::uint8_t   unk3058D;            /* 12D */ \
-	std::uint16_t  unk3058E;            /* 12E */ \
-	std::uint64_t  unk30590;            /* 130 */
+#define RUNTIME_DATA2_CONTENT                        \
+	COMMON_MAP_DATA2_CONTENT                         \
+	MapCamera      camera;                 /* 040 */ \
+	std::uint64_t  unk30530;               /* 0D0 */ \
+	TESWorldSpace* worldSpace;             /* 0D8 */ \
+	GFxValue       mapMovie;               /* 0E0 */ \
+	std::int32_t   selectedMarker;         /* 0F8 */ \
+	NiPoint3       cameraPickOrigin;       /* 0FC */ \
+	NiPoint3       cameraPickDirection;    /* 108 */ \
+	BSSoundHandle  unk30574;               /* 114 */ \
+	std::int32_t   pickCountdown;          /* 120 */ \
+	bool           savedPlayerUnderwater;  /* 124 */ \
+	bool           markersEnabled;         /* 125 */ \
+	bool           nonDoorMarkersEnabled;  /* 126 */ \
+	std::uint8_t   pad30587;               /* 127 */ \
+	std::uint8_t   unk30588;               /* 128 */ \
+	std::uint8_t   unk30589;               /* 129 */ \
+	bool           overrodeTESWorldSpace;  /* 12A */ \
+	bool           cameraSetupPending;     /* 12B */ \
+	bool           controlsReady;          /* 12C */ \
+	bool           currentLocationEnabled; /* 12D */ \
+	bool           fastTravelConfirmed;    /* 12E */ \
+	bool           mapMarkersAllowed;      /* 12F */ \
+	bool           ownsTempMarkerRef;      /* 130 */ \
+	std::uint8_t   pad30591[7];            /* 131 */
 
 			RUNTIME_DATA2_CONTENT
 		};
@@ -116,21 +126,37 @@ namespace RE
 
 		struct VR_RUNTIME_DATA2
 		{
-#define VR_RUNTIME_DATA2_CONTENT             \
-	COMMON_MAP_DATA2_CONTENT                 \
-	NiPoint3       unk30570;       /* 040 */ \
-	std::int32_t   selectedMarker; /* 04C */ \
-	std::uint64_t  unk30580;       /* 050 */ \
-	std::uint64_t  unk30588;       /* 058 */ \
-	TESWorldSpace* worldSpace;     /* 060 */ \
-	GFxValue       mapMovie;       /* 068 */ \
-	BSSoundHandle  unk305B0;       /* 080 */ \
-	std::uint64_t  unk305C0;       /* 088 */ \
-	std::uint64_t  unk305C8;       /* 090 */ \
-	std::uint64_t  unk305D0;       /* 098 */ \
-	std::uint64_t  unk305D8;       /* 0A0 */ \
-	std::uint64_t  unk305E0;       /* 0A8 */ \
-	std::uint64_t  unk305E8;       /* 0B0 */
+#define VR_RUNTIME_DATA2_CONTENT                     \
+	COMMON_MAP_DATA2_CONTENT                         \
+	NiPoint3       unk30570;               /* 040 */ \
+	float          savedNearDistance;      /* 04C */ \
+	float          savedFarDistance;       /* 050 */ \
+	std::uint32_t  unk30584;               /* 054 */ \
+	std::uint64_t  unk30588;               /* 058 */ \
+	TESWorldSpace* worldSpace;             /* 060 */ \
+	GFxValue       mapMovie;               /* 068 */ \
+	BSSoundHandle  unk305B0;               /* 080 */ \
+	std::uint8_t   unk305BC;               /* 08C */ \
+	std::uint8_t   unk305BD;               /* 08D */ \
+	std::uint8_t   unk305BE;               /* 08E */ \
+	std::uint8_t   unk305BF;               /* 08F */ \
+	std::uint8_t   unk305C0;               /* 090 */ \
+	std::uint8_t   unk305C1;               /* 091 */ \
+	bool           overrodeTESWorldSpace;  /* 092 */ \
+	bool           initialized;            /* 093 */ \
+	bool           refreshPlayerMarker;    /* 094 */ \
+	bool           refreshMapAngle;        /* 095 */ \
+	bool           closing;                /* 096 */ \
+	bool           controlsReady;          /* 097 */ \
+	bool           currentLocationEnabled; /* 098 */ \
+	bool           fastTravelConfirmed;    /* 099 */ \
+	bool           mapMarkersAllowed;      /* 09A */ \
+	bool           ownsTempMarkerRef;      /* 09B */ \
+	std::uint32_t  pad305CC;               /* 09C */ \
+	NiAVObject*    crosshairParent;        /* 0A0 */ \
+	NiAVObject*    locationBeaconParent;   /* 0A8 */ \
+	NiAVObject*    markerText3DNode;       /* 0B0 */ \
+	IMenu*         markerText3DMenu;       /* 0B8 */
 
 			VR_RUNTIME_DATA2_CONTENT;
 		};
@@ -171,7 +197,21 @@ namespace RE
 
 #ifndef SKYRIM_CROSS_VR
 		RUNTIME_CAST_ACCESSOR(BSTEventSink<MenuOpenCloseEvent>, AsMenuOpenCloseEventSink, 0x30, 0x58);
-		RUNTIME_CAST_ACCESSOR(IMapCameraCallbacks, AsIMapCameraCallbacks, 0x38, 0x60);
+
+		// VR has no IMapCameraCallbacks subobject, so this is flat-only.
+		[[nodiscard]] inline IMapCameraCallbacks* AsIMapCameraCallbacks() noexcept
+		{
+			if SKYRIM_REL_VR_CONSTEXPR (!REL::Module::IsVR()) {
+				return &REL::RelocateMember<IMapCameraCallbacks>(this, 0x38, 0);
+			} else {
+				return nullptr;
+			}
+		}
+
+		[[nodiscard]] inline const IMapCameraCallbacks* AsIMapCameraCallbacks() const noexcept
+		{
+			return const_cast<MapMenu*>(this)->AsIMapCameraCallbacks();
+		}
 #endif
 
 		[[nodiscard]] inline RUNTIME_DATA* GetRuntimeData() noexcept
@@ -254,7 +294,7 @@ namespace RE
 		VR_RUNTIME_DATA2_CONTENT;                 // 30460, 30530
 #endif
 	};
-	STATIC_ASSERT_SIZE(MapMenu, 0x30598, 0x30598, 0x305f8, 0x30);
+	STATIC_ASSERT_SIZE(MapMenu, 0x30598, 0x30598, 0x305f0, 0x30);
 }
 
 // Clean up sub-macros

@@ -27,6 +27,7 @@ namespace RE
 	class Stars;
 	class Sun;
 	class TESClimate;
+	class TESObjectREFR;
 	class TESRegion;
 	class TESWeather;
 
@@ -64,7 +65,11 @@ namespace RE
 		struct SkyStaticRefData
 		{
 		public:
+			// members
+			BSPointerHandle<TESObjectREFR> refrHandle;  // 0
+			std::uint32_t                  unk4;        // 4
 		};
+		static_assert(sizeof(SkyStaticRefData) == 0x8);
 
 		struct COLOR_BLEND
 		{
@@ -74,7 +79,9 @@ namespace RE
 
 		virtual ~Sky();  // 00
 
-		static Sky* GetSingleton();
+		static Sky*                 GetSingleton();
+		[[nodiscard]] static float& GetLightLODStartFadeSquared() noexcept;
+		[[nodiscard]] static float& GetLightLODEndFadeSquared() noexcept;
 
 		[[nodiscard]] float GetSunriseBegin();
 		[[nodiscard]] float GetSunriseEnd();

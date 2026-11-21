@@ -22,6 +22,7 @@ namespace RE
 		size_type     _free{ 0 };      // 10 - # of free slots
 		size_type     _good{ 0 };      // 14 - last free index
 	};
+	static_assert(sizeof(BSTScatterTableStandardParent) == 0x18);
 
 	struct BSTScatterTableFixedParent
 	{
@@ -33,6 +34,7 @@ namespace RE
 		size_type     _free{ 0 };      // 08 - # of free slots
 		size_type     _good{ 0 };      // 0C - last free index
 	};
+	static_assert(sizeof(BSTScatterTableFixedParent) == 0x10);
 
 	// scatter table with chaining
 	template <
@@ -130,11 +132,8 @@ namespace RE
 
 			union value_union
 			{
-				value_union() :
-					value() {}
-
-				~value_union() { value.~value_type(); }
-
+				value_union() {}
+				~value_union() {}
 				value_type value;
 				std::byte  buffer[sizeof(value_type)]{ static_cast<std::byte>(0) };
 			};
@@ -308,10 +307,14 @@ namespace RE
 				const auto entries = get_entries();
 				assert(entries != nullptr);
 				for (size_type i = 0; i < Parent::_capacity; ++i) {
-					entries[i].destroy();
+					if (entries[i].has_value()) {
+						auto& value = entries[i].value_data.value;
+						entries[i].next = nullptr;  // slot is free before the value's destructor runs
+						std::destroy_at(std::addressof(value));
+					}
 				}
 				Parent::_free = Parent::_capacity;
-				Parent::_good = 0;
+				Parent::_good = Parent::_capacity;
 			}
 
 			assert(empty());
@@ -335,6 +338,16 @@ namespace RE
 			requires(std::constructible_from<value_type, Args...>)
 		{
 			return insert(value_type(std::forward<Args>(a_args)...));
+		}
+
+		template <class M>
+		std::pair<iterator, bool> insert_or_assign(const key_type& a_key, M&& a_mapped)
+		{
+			if (const auto it = find(a_key); it != end()) {
+				it->second = std::forward<M>(a_mapped);
+				return std::make_pair(it, false);
+			}
+			return emplace(a_key, std::forward<M>(a_mapped));
 		}
 
 		iterator erase(const_iterator a_pos) { return do_erase(a_pos); }
@@ -381,7 +394,7 @@ namespace RE
 			const auto setCap = [&](size_type a_newCap) {
 				Parent::_capacity = a_newCap;
 				Parent::_free = Parent::_capacity;
-				Parent::_good = 0;
+				Parent::_good = Parent::_capacity;
 			};
 
 			if (newEntries == oldEntries) {
@@ -563,9 +576,9 @@ namespace RE
 			}());
 
 			const auto entries = get_entries();
-			while (entries[Parent::_good].has_value()) {
-				Parent::_good = (Parent::_good + 1) & (Parent::_capacity - 1);  // wrap around w/ quick modulo
-			}
+			do {
+				Parent::_good = (Parent::_good - 1) & (Parent::_capacity - 1);  // scan downward as the SE 1.5.97 does
+			} while (entries[Parent::_good].has_value());
 			return entries[Parent::_good];
 		}
 

@@ -3,8 +3,11 @@
 #include "RE/B/BSTArray.h"
 #include "RE/N/NiAVObject.h"
 #include "RE/N/NiFrustum.h"
+#include "RE/N/NiMatrix3.h"
 #include "RE/N/NiPoint3.h"
+#include "RE/N/NiPoint4.h"
 #include "RE/N/NiRect.h"
+#include "REL/Relocation.h"
 #include "REL/RuntimeDataAccessors.h"
 
 namespace RE
@@ -27,24 +30,22 @@ namespace RE
 		// VR Layout
 		struct RUNTIME_DATA_VR
 		{
-#define RUNTIME_DATA_CONTENT_VR                                                              \
-	float                   worldToCam[4][4];   /* 00 */                                     \
-	NiFrustum*              viewFrustumBuffer;  /* 40 - UpdateProjection writes here */      \
-	NiFrustum*              viewFrustumArray;   /* 48 - per-eye frustums for GetNearPlane */ \
-	BSTArray<NiRect<float>> eyeViewportRects;   /* 50 */                                     \
-	BSTArray<NiMatrix44>    eyeViewMatrices;    /* 68 */                                     \
-	void*                   eyeCullingProcs[2]; /* 80 */                                     \
-	std::uint32_t           unk1C8;             /* 90 */
+#define RUNTIME_DATA_CONTENT_VR                                                    \
+	float               worldToCam[4][4];  /* 00 */                                \
+	NiFrustum*          viewFrustumBuffer; /* 40 - UpdateProjection writes here */ \
+	BSTArray<NiFrustum> eyeFrustums;       /* 48 */                                \
+	BSTArray<NiPoint3>  eyePositions;      /* 60 */                                \
+	BSTArray<NiMatrix3> eyeRotations;      /* 78 */                                \
+	std::uint32_t       eyeCount;          /* 90 */
 
 			RUNTIME_DATA_CONTENT_VR
 		};
 		static_assert(sizeof(RUNTIME_DATA_VR) == 0x98);
 		static_assert(offsetof(RUNTIME_DATA_VR, viewFrustumBuffer) == 0x40);
-		static_assert(offsetof(RUNTIME_DATA_VR, viewFrustumArray) == 0x48);
-		static_assert(offsetof(RUNTIME_DATA_VR, eyeViewportRects) == 0x50);
-		static_assert(offsetof(RUNTIME_DATA_VR, eyeViewMatrices) == 0x68);
-		static_assert(offsetof(RUNTIME_DATA_VR, eyeCullingProcs) == 0x80);
-		static_assert(offsetof(RUNTIME_DATA_VR, unk1C8) == 0x90);
+		static_assert(offsetof(RUNTIME_DATA_VR, eyeFrustums) == 0x48);
+		static_assert(offsetof(RUNTIME_DATA_VR, eyePositions) == 0x60);
+		static_assert(offsetof(RUNTIME_DATA_VR, eyeRotations) == 0x78);
+		static_assert(offsetof(RUNTIME_DATA_VR, eyeCount) == 0x90);
 
 		struct RUNTIME_DATA2
 		{
@@ -78,6 +79,17 @@ namespace RE
 		static bool BoundInFrustum(const NiBound& a_bound, RE::NiCamera* a_camera);
 		bool        NodeInFrustum(NiAVObject* a_node);
 		bool        PointInFrustum(const NiPoint3& a_point, float a_radius);
+		void        CalculateFrustumOverlap(const NiPoint4* a_coord, NiPoint3* a_r1, NiPoint3* a_r2, float a_epsilon)
+		{
+			static REL::Relocation<std::uintptr_t> address{ RELOCATION_ID(69265, 70632) };
+			if (REL::Module::IsVR()) {
+				using func_t = void (*)(NiCamera*, const NiPoint4*, NiPoint3*, NiPoint3*, std::int32_t, float);
+				reinterpret_cast<func_t>(address.address())(this, a_coord, a_r1, a_r2, -1, a_epsilon);
+			} else {
+				using func_t = void (*)(NiCamera*, const NiPoint4*, NiPoint3*, NiPoint3*, float);
+				reinterpret_cast<func_t>(address.address())(this, a_coord, a_r1, a_r2, a_epsilon);
+			}
+		}
 
 		bool        WindowPointToRay(std::int32_t a_x, std::int32_t a_y, NiPoint3& a_origin, NiPoint3& a_dir, float a_windowWidth, float a_windowHeight);
 		bool        WorldPtToScreenPt3(const NiPoint3& a_point, float& a_xOut, float& a_yOut, float& a_zOut, float a_zeroTolerance);
@@ -94,7 +106,7 @@ namespace RE
 		[[nodiscard]] float GetNearPlane() const
 		{
 			if (REL::Module::IsVR()) {
-				return GetVRRuntimeData().viewFrustumArray->fNear;
+				return GetVRRuntimeData().eyeFrustums[0].fNear;
 			}
 			// Fallback to Flat data
 			return GetRuntimeData2().viewFrustum.fNear;

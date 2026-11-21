@@ -3,26 +3,27 @@
 #include "RE/T/TESClimate.h"
 #include "RE/T/TESWeather.h"
 
+#include "SkyPrecipitation.h"
+
 namespace RE
 {
-	namespace
-	{
-		bool HasPrecipitation(const Sky& a_sky, TESWeather::WeatherDataFlag a_flag)
-		{
-			const auto* current = a_sky.currentWeather;
-			const auto* previous = a_sky.lastWeather;
-			return (current && current->data.flags.any(a_flag) &&
-					   static_cast<float>(current->data.precipitationBeginFadeIn) / 255.0F < a_sky.currentWeatherPct) ||
-			       (previous && previous->data.flags.any(a_flag) &&
-					   static_cast<float>(previous->data.precipitationEndFadeOut) / 255.0F > a_sky.currentWeatherPct);
-		}
-	}
-
 	Sky* Sky::GetSingleton()
 	{
 		using func_t = decltype(&Sky::GetSingleton);
 		static REL::Relocation<func_t> func{ RELOCATION_ID(13789, 13878) };
 		return func();
+	}
+
+	float& Sky::GetLightLODStartFadeSquared() noexcept
+	{
+		static REL::Relocation<float*> distance{ RELOCATION_ID(527668, 414582) };
+		return *distance;
+	}
+
+	float& Sky::GetLightLODEndFadeSquared() noexcept
+	{
+		static REL::Relocation<float*> distance{ RELOCATION_ID(527669, 414583) };
+		return *distance;
 	}
 
 	float Sky::GetSunriseBegin()
@@ -118,12 +119,12 @@ namespace RE
 
 	bool Sky::IsRaining() const
 	{
-		return HasPrecipitation(*this, TESWeather::WeatherDataFlag::kRainy);
+		return detail::HasPrecipitation(*this, TESWeather::WeatherDataFlag::kRainy);
 	}
 
 	bool Sky::IsSnowing() const
 	{
-		return HasPrecipitation(*this, TESWeather::WeatherDataFlag::kSnow);
+		return detail::HasPrecipitation(*this, TESWeather::WeatherDataFlag::kSnow);
 	}
 
 	void Sky::ReleaseWeatherOverride()

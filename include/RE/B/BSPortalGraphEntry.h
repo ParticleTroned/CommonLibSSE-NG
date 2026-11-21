@@ -5,6 +5,7 @@
 #include "RE/B/BSTHashMap.h"
 #include "RE/N/NiRefObject.h"
 #include "RE/N/NiSmartPointer.h"
+#include "REL/Relocation.h"
 
 namespace RE
 {
@@ -22,6 +23,12 @@ namespace RE
 		void SetPortalGraph(BSPortalGraph* a_portalGraph);
 		void AddVisibilityToMap(void* a_space, BSCompoundFrustum* a_compoundFrustum);
 		void ClearVisibility();
+		bool HasSharedRoomVisibility(BSPortalGraphEntry* a_second)
+		{
+			using func_t = bool (*)(BSPortalGraphEntry*, BSPortalGraphEntry*);
+			static REL::Relocation<func_t> func{ RELOCATION_ID(74397, 76121) };
+			return func(this, a_second);
+		}
 
 		// members
 		BSPortalGraph*                          portalGraph;              // 10

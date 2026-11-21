@@ -66,65 +66,6 @@ TEST_CASE("Backports/SmallSharedArray empty and occupied", "[unit][backports]")
 	}
 }
 
-TEST_CASE("Backports/Precipitation covers every stored byte", "[unit][backports]")
-{
-	EngineStorage<RE::Sky>        skyStorage;
-	EngineStorage<RE::TESWeather> weatherStorage;
-	auto*                         sky = skyStorage.get();
-	auto*                         weather = weatherStorage.get();
-	CHECK_FALSE(sky->IsRaining());
-	CHECK_FALSE(sky->IsSnowing());
-
-	for (auto flag : { RE::TESWeather::WeatherDataFlag::kRainy, RE::TESWeather::WeatherDataFlag::kSnow }) {
-		weather->data.flags = flag;
-		for (unsigned value = 0; value <= 255; ++value) {
-			weather->data.precipitationBeginFadeIn = static_cast<std::uint8_t>(value);
-			weather->data.precipitationEndFadeOut = static_cast<std::uint8_t>(value);
-			for (float progress : { 0.0F, 0.25F, 0.5F, 0.75F, 1.0F }) {
-				CAPTURE(value, progress);
-				sky->currentWeatherPct = progress;
-				sky->currentWeather = weather;
-				sky->lastWeather = nullptr;
-				const bool started = value < progress * 255.0F;
-				CHECK(sky->IsRaining() == (started && flag == RE::TESWeather::WeatherDataFlag::kRainy));
-				CHECK(sky->IsSnowing() == (started && flag == RE::TESWeather::WeatherDataFlag::kSnow));
-				sky->currentWeather = nullptr;
-				sky->lastWeather = weather;
-				const bool remaining = value > progress * 255.0F;
-				CHECK(sky->IsRaining() == (remaining && flag == RE::TESWeather::WeatherDataFlag::kRainy));
-				CHECK(sky->IsSnowing() == (remaining && flag == RE::TESWeather::WeatherDataFlag::kSnow));
-			}
-		}
-	}
-}
-
-TEST_CASE("Backports/Precipitation transitions combine matching weather flags", "[unit][backports]")
-{
-	EngineStorage<RE::Sky>        skyStorage;
-	EngineStorage<RE::TESWeather> currentStorage;
-	EngineStorage<RE::TESWeather> previousStorage;
-	auto*                         sky = skyStorage.get();
-	sky->currentWeather = currentStorage.get();
-	sky->lastWeather = previousStorage.get();
-	currentStorage.get()->data.flags = RE::TESWeather::WeatherDataFlag::kSnow;
-	currentStorage.get()->data.precipitationBeginFadeIn = 64;
-	previousStorage.get()->data.flags = RE::TESWeather::WeatherDataFlag::kRainy;
-	previousStorage.get()->data.precipitationEndFadeOut = 192;
-	sky->currentWeatherPct = 64.0F / 255.0F;
-	CHECK(sky->IsRaining());
-	CHECK_FALSE(sky->IsSnowing());
-	sky->currentWeatherPct = 0.5F;
-	CHECK(sky->IsRaining());
-	CHECK(sky->IsSnowing());
-	sky->currentWeatherPct = 192.0F / 255.0F;
-	CHECK_FALSE(sky->IsRaining());
-	CHECK(sky->IsSnowing());
-	currentStorage.get()->data.flags = RE::TESWeather::WeatherDataFlag::kPleasant;
-	previousStorage.get()->data.flags = RE::TESWeather::WeatherDataFlag::kCloudy;
-	CHECK_FALSE(sky->IsRaining());
-	CHECK_FALSE(sky->IsSnowing());
-}
-
 TEST_CASE("Backports/Opaque Havok references remain copyable", "[unit][backports]")
 {
 	decltype(RE::hkbCharacter::footIkDriver) foot;

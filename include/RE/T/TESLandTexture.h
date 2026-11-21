@@ -3,6 +3,7 @@
 #include "RE/B/BSSimpleList.h"
 #include "RE/F/FormTypes.h"
 #include "RE/T/TESForm.h"
+#include "REL/Relocation.h"
 
 namespace RE
 {
@@ -19,6 +20,12 @@ namespace RE
 		inline static constexpr auto RTTI = RTTI_TESLandTexture;
 		inline static constexpr auto VTABLE = VTABLE_TESLandTexture;
 		inline static constexpr auto FORMTYPE = FormType::LandTexture;
+
+		[[nodiscard]] static TESLandTexture*& GetDefaultLandTexture() noexcept
+		{
+			static REL::Relocation<TESLandTexture**> texture{ RELOCATION_ID(514783, 400936) };
+			return *texture;
+		}
 
 		struct RecordFlags
 		{

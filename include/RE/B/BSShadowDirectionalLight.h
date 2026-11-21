@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RE/B/BSShadowLight.h"
+#include "REL/Relocation.h"
 #include "REL/RuntimeDataAccessors.h"
 
 namespace RE
@@ -27,6 +28,40 @@ namespace RE
 		static_assert(sizeof(RUNTIME_DATA) == 0x58);
 
 		~BSShadowDirectionalLight() override;  // 00
+
+		void SetupFocusShadowAccumulators()
+		{
+			using func_t = void (*)(BSShadowDirectionalLight*);
+			static REL::Relocation<func_t> func{ RELOCATION_ID(100819, 107603) };
+			func(this);
+		}
+
+		void SetupFocusShadowMaps(NiCamera* a_camera)
+		{
+			using func_t = void (*)(BSShadowDirectionalLight*, NiCamera*);
+			static REL::Relocation<func_t> func{ RELOCATION_ID(100817, 107601) };
+			func(this, a_camera);
+		}
+
+		void StepShadowAccumulators()
+		{
+			if (!REL::Module::IsVR()) {
+				return;
+			}
+			using func_t = void (*)(BSShadowDirectionalLight*);
+			static REL::Relocation<func_t> func{ REL::Offset(0x1356e50) };
+			func(this);
+		}
+
+		void ClearShadowAccumulators()
+		{
+			if (!REL::Module::IsVR()) {
+				return;
+			}
+			using func_t = void (*)(BSShadowDirectionalLight*);
+			static REL::Relocation<func_t> func{ REL::Offset(0x1357450) };
+			func(this);
+		}
 
 		// override (BSShadowLight)
 		bool          GetIsFrustumOrDirectionalLight() override;                                                                                                                     // 04

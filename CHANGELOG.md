@@ -1,3 +1,717 @@
+## [16.10.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v16.9.0...v16.10.0) (2026-11-20)
+
+### Features
+
+* movable SimpleArray ([#536](https://github.com/alandtse/CommonLibSSE-NG/issues/536)) ([056103c](https://github.com/alandtse/CommonLibSSE-NG/commit/056103c7c32f51d0e02b79783e2d291a75c9a6fb))
+* **vm:** add IForEachScriptObjectFunctor ([#539](https://github.com/alandtse/CommonLibSSE-NG/issues/539)) ([82eb52f](https://github.com/alandtse/CommonLibSSE-NG/commit/82eb52f747400f0b5d25f13cf6476c3db8603e9c))
+
+### Bug Fixes
+
+* **RE:** name GRefCountBaseGC collector members ([#537](https://github.com/alandtse/CommonLibSSE-NG/issues/537)) ([2338eb1](https://github.com/alandtse/CommonLibSSE-NG/commit/2338eb119ce30623be0a60a67f77de6e00abe144)), closes [alandtse/skyrim_vr_address_library#360](https://github.com/alandtse/skyrim_vr_address_library/issues/360)
+* **typeinfo:** use Skyrim's type->string conversion ([#538](https://github.com/alandtse/CommonLibSSE-NG/issues/538)) ([eeb7a81](https://github.com/alandtse/CommonLibSSE-NG/commit/eeb7a819d61c1803bab2bff1502315cde7a3623b))
+
+## [16.9.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v16.8.0...v16.9.0) (2026-11-19)
+
+### Features
+
+* concrete BSTSmallSharedArray ([#518](https://github.com/alandtse/CommonLibSSE-NG/issues/518)) ([e9d098d](https://github.com/alandtse/CommonLibSSE-NG/commit/e9d098d2e093cd7fb931872a87eac82d1d0c6afc))
+
+## [16.8.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v16.7.0...v16.8.0) (2026-11-18)
+
+### Features
+
+* **combatinventory:** name weapon/ammo arrays ([#529](https://github.com/alandtse/CommonLibSSE-NG/issues/529)) ([21a3dbb](https://github.com/alandtse/CommonLibSSE-NG/commit/21a3dbb0333f69ca238a51614fe213b551b40d9b))
+* name and size ExecStateContext ([#531](https://github.com/alandtse/CommonLibSSE-NG/issues/531)) ([0c4b64e](https://github.com/alandtse/CommonLibSSE-NG/commit/0c4b64eddcd5e3cd6eed6fecd594269e2e48ec27))
+* **procedure:** name ExecState virtuals ([#527](https://github.com/alandtse/CommonLibSSE-NG/issues/527)) ([1bd09cd](https://github.com/alandtse/CommonLibSSE-NG/commit/1bd09cd094e3ce822ad249d6985cd6a944c4fb5b))
+
+### Bug Fixes
+
+* **havok:** order shape filter virtuals as game ([#535](https://github.com/alandtse/CommonLibSSE-NG/issues/535)) ([d5c9fc9](https://github.com/alandtse/CommonLibSSE-NG/commit/d5c9fc95a5bc1ab6d2135346568895ffabff65e3))
+* **processdata:** type furnitureFacing as float ([#528](https://github.com/alandtse/CommonLibSSE-NG/issues/528)) ([b1018a4](https://github.com/alandtse/CommonLibSSE-NG/commit/b1018a4ae47aa9d7ddcadf858b62508f86bc8313))
+* **RE:** Havok filters return hkBool ([#532](https://github.com/alandtse/CommonLibSSE-NG/issues/532)) ([ac9cdfc](https://github.com/alandtse/CommonLibSSE-NG/commit/ac9cdfc4dedd9916912517a5461c3e22071fdcc4))
+
+## [16.7.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v16.6.0...v16.7.0) (2026-11-16)
+
+### Features
+
+* **array:** add element type accessor ([#526](https://github.com/alandtse/CommonLibSSE-NG/issues/526)) ([acf1845](https://github.com/alandtse/CommonLibSSE-NG/commit/acf1845834fc51eac8f35fe2924c2974d688515f))
+* BSTHashMap insert_or_assign ([#517](https://github.com/alandtse/CommonLibSSE-NG/issues/517)) ([b1bf5e0](https://github.com/alandtse/CommonLibSSE-NG/commit/b1bf5e0f538d166ca3b3e86a2249c198986498db))
+* concrete AttachedScript ([#520](https://github.com/alandtse/CommonLibSSE-NG/issues/520)) ([113b72e](https://github.com/alandtse/CommonLibSSE-NG/commit/113b72eca232f3b6e4cebec032527a77050ccaff))
+* name ObjectBindPolicy::ClearAll ([#525](https://github.com/alandtse/CommonLibSSE-NG/issues/525)) ([276e4a8](https://github.com/alandtse/CommonLibSSE-NG/commit/276e4a8e067d1081d4ac3116eb55f375b285b98b))
+* RE IVMObjectBindInterface ([#522](https://github.com/alandtse/CommonLibSSE-NG/issues/522)) ([23c434c](https://github.com/alandtse/CommonLibSSE-NG/commit/23c434c2248448ed6310083d8d10d4d987e036d3))
+* RE IVMSaveLoadInterface ([#524](https://github.com/alandtse/CommonLibSSE-NG/issues/524)) ([0d306fb](https://github.com/alandtse/CommonLibSSE-NG/commit/0d306fb12e947ca9d4e9209e2145a42c8088aba6))
+
+### Bug Fixes
+
+* **bytecode:** return int from InstructionFunctor ([#519](https://github.com/alandtse/CommonLibSSE-NG/issues/519)) ([58f0440](https://github.com/alandtse/CommonLibSSE-NG/commit/58f044023a8654f09ebcb9424d5543d73df20a33))
+
+## [16.6.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v16.5.0...v16.6.0) (2026-11-16)
+
+### Features
+
+* add PropertyTypeInfo function getters ([#511](https://github.com/alandtse/CommonLibSSE-NG/issues/511)) ([5587de6](https://github.com/alandtse/CommonLibSSE-NG/commit/5587de62c02dbf941ed6d60011b5179d5c09bf30))
+* **BSInputDeviceManager:** add RefreshVRControllerDevices ([#508](https://github.com/alandtse/CommonLibSSE-NG/issues/508)) ([72181a3](https://github.com/alandtse/CommonLibSSE-NG/commit/72181a33d19ea180e7ce8c7cdd6034aa29c3aca6))
+* **bytecode:** concrete PackedInstructionStream ([#513](https://github.com/alandtse/CommonLibSSE-NG/issues/513)) ([909517b](https://github.com/alandtse/CommonLibSSE-NG/commit/909517ba2416bc530abf1d2794b319664850e234))
+
+## [16.5.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v16.4.0...v16.5.0) (2026-11-14)
+
+### Features
+
+* concrete BSScript::ByteCode::Argument ([#509](https://github.com/alandtse/CommonLibSSE-NG/issues/509)) ([bac26f0](https://github.com/alandtse/CommonLibSSE-NG/commit/bac26f054983357e093bea1496ae2891d09e87ac))
+* **papyrus:** add concrete AutoProp Get/Set functions ([#507](https://github.com/alandtse/CommonLibSSE-NG/issues/507)) ([b91ba76](https://github.com/alandtse/CommonLibSSE-NG/commit/b91ba76604956a3de9c834887f6d53b7f754420d))
+* partial BSScriptObjectBindPolicy RE ([#510](https://github.com/alandtse/CommonLibSSE-NG/issues/510)) ([be1a462](https://github.com/alandtse/CommonLibSSE-NG/commit/be1a462f58ca2a630f548fd5558d7e338241a2b8))
+* RE IFunction::Call's final parameter ([#514](https://github.com/alandtse/CommonLibSSE-NG/issues/514)) ([d072ac3](https://github.com/alandtse/CommonLibSSE-NG/commit/d072ac3b56570b40dd062e929ab75f92d61954ee))
+
+### Bug Fixes
+
+* BSTHashMap double-free and edge-boundary insert ([#515](https://github.com/alandtse/CommonLibSSE-NG/issues/515)) ([b26d412](https://github.com/alandtse/CommonLibSSE-NG/commit/b26d412306b239809c2956d2145a2dee9f8d2137))
+* **TypeInfo:** invalid array type info ([#512](https://github.com/alandtse/CommonLibSSE-NG/issues/512)) ([1f62c22](https://github.com/alandtse/CommonLibSSE-NG/commit/1f62c224fd143378d92b9398f7949441290d81d9))
+* **vr:** correct BSTrackedControllerDevice layout ([#516](https://github.com/alandtse/CommonLibSSE-NG/issues/516)) ([69b895f](https://github.com/alandtse/CommonLibSSE-NG/commit/69b895f89d047d552150d2bc41bc4c1ac3b795ed))
+
+## [16.4.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v16.3.0...v16.4.0) (2026-11-12)
+
+### Features
+
+* **BSBitReader:** add class ([#504](https://github.com/alandtse/CommonLibSSE-NG/issues/504)) ([9552c81](https://github.com/alandtse/CommonLibSSE-NG/commit/9552c814d78c4ccbc956c60fd8263d1280a40376))
+* **BSScript:** RE profiler vfuncs ([#501](https://github.com/alandtse/CommonLibSSE-NG/issues/501)) ([8edac4d](https://github.com/alandtse/CommonLibSSE-NG/commit/8edac4d2cc4f9cc5b449c9be2acdb485e74346d9))
+* **BSTMessageQueue:** add concrete implementations ([#500](https://github.com/alandtse/CommonLibSSE-NG/issues/500)) ([ccd373a](https://github.com/alandtse/CommonLibSSE-NG/commit/ccd373aab111f4dec4d8ed123bc003abed0711ad))
+* **character:** add SetAnimationDrivenMotion ([#496](https://github.com/alandtse/CommonLibSSE-NG/issues/496)) ([266032b](https://github.com/alandtse/CommonLibSSE-NG/commit/266032b547ccf89902e37e9e035298b888526f4a))
+* concrete BSScript Array ([#502](https://github.com/alandtse/CommonLibSSE-NG/issues/502)) ([d4212a0](https://github.com/alandtse/CommonLibSSE-NG/commit/d4212a02ecd924a775eb379f77969d48b3d025e3))
+
+### Bug Fixes
+
+* correct Init and AddImpact return types ([#495](https://github.com/alandtse/CommonLibSSE-NG/issues/495)) ([f123da6](https://github.com/alandtse/CommonLibSSE-NG/commit/f123da61fccfdf9150e1096c1d71b1944d693e2d))
+* default ContainerItemExtra healthMult to 1 ([#506](https://github.com/alandtse/CommonLibSSE-NG/issues/506)) ([b413bc2](https://github.com/alandtse/CommonLibSSE-NG/commit/b413bc26d92b8fc53f19cf7c95d720abb1b1a53d))
+
+## [16.3.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v16.2.0...v16.3.0) (2026-11-11)
+
+### Features
+
+* RE IStackCallbackSaveInterface ([#503](https://github.com/alandtse/CommonLibSSE-NG/issues/503)) ([fa5c96a](https://github.com/alandtse/CommonLibSSE-NG/commit/fa5c96af36069a7d77fb0ec82c257cd4a2f8663d))
+
+## [16.2.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v16.1.0...v16.2.0) (2026-11-11)
+
+### Features
+
+* **variable:** add IsTruthyValue to BSScript::Variable ([#499](https://github.com/alandtse/CommonLibSSE-NG/issues/499)) ([171d7e3](https://github.com/alandtse/CommonLibSSE-NG/commit/171d7e3bac8337868ec143c5c49249f779ae960c))
+
+### Bug Fixes
+
+* **variable:** compare signed int values ([#498](https://github.com/alandtse/CommonLibSSE-NG/issues/498)) ([acafd4f](https://github.com/alandtse/CommonLibSSE-NG/commit/acafd4ff3ff550af8d250ecbe8d79a6a72a85d85))
+* **variable:** null value pointer after Cleanup to prevent double-free ([#497](https://github.com/alandtse/CommonLibSSE-NG/issues/497)) ([700f43e](https://github.com/alandtse/CommonLibSSE-NG/commit/700f43e15e0c54116abf5349771590d792765918))
+
+## [16.1.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v16.0.1...v16.1.0) (2026-11-10)
+
+### Features
+
+* **PlayerCharacter:** add waypoint functions ([#494](https://github.com/alandtse/CommonLibSSE-NG/issues/494)) ([066cb90](https://github.com/alandtse/CommonLibSSE-NG/commit/066cb901b4de47907c7e7c0b0042b84c3b77c6cc))
+
+### Bug Fixes
+
+* **weather:** make weather data bytes unsigned ([#493](https://github.com/alandtse/CommonLibSSE-NG/issues/493)) ([1530c51](https://github.com/alandtse/CommonLibSSE-NG/commit/1530c517262c7711008850ec5a1b3be9777a13c4))
+
+## [16.0.1](https://github.com/alandtse/CommonLibSSE-NG/compare/v16.0.0...v16.0.1) (2026-11-08)
+
+### Bug Fixes
+
+* `GMatrix2D::SetInverse` ([4116603](https://github.com/alandtse/CommonLibSSE-NG/commit/41166031f5f1ed3002aba5fd8b3ca1cf0f44d9d3))
+* mask the raw ID to the plugin's own bits in `TESDataHandler::LookupForm(ID)` ([76bb517](https://github.com/alandtse/CommonLibSSE-NG/commit/76bb517dc9aa7fb9be1587cb9fa811f4f1af2366))
+* prevent crash due to missing keyword editor id ([ed5059e](https://github.com/alandtse/CommonLibSSE-NG/commit/ed5059ee3ca40bb11a3343b8852c9945d3aca53e))
+
+## [16.0.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v15.7.3...v16.0.0) (2026-11-08)
+
+### ⚠ BREAKING CHANGES
+
+* **PlayerRegionState:** RE::PlayerRegionState::lastKnownWeatherRegion is renamed to currentRegion. Plugins that read this member fail to compile until the name is updated; type (TESRegion*) and offset (0x48) are unchanged.
+
+### Bug Fixes
+
+* **GMatrix2D:** handle self-aliasing args ([#490](https://github.com/alandtse/CommonLibSSE-NG/issues/490)) ([34e9aa7](https://github.com/alandtse/CommonLibSSE-NG/commit/34e9aa74105fc9ec5bdadfa4875eb745209b81cc))
+* **PlayerRegionState:** use pointer id on SE/VR ([#486](https://github.com/alandtse/CommonLibSSE-NG/issues/486)) ([4ee5bd0](https://github.com/alandtse/CommonLibSSE-NG/commit/4ee5bd039f18b2cf7fa9a6b5088a5d88bb135237))
+
+### Code Refactoring
+
+* **PlayerRegionState:** rename currentRegion ([#488](https://github.com/alandtse/CommonLibSSE-NG/issues/488)) ([2ff8034](https://github.com/alandtse/CommonLibSSE-NG/commit/2ff803460895041f9a05e1ab192a5512f757e4d2))
+
+## [15.7.3](https://github.com/alandtse/CommonLibSSE-NG/compare/v15.7.2...v15.7.3) (2026-11-07)
+
+### Bug Fixes
+
+* **state:** correct SE and VR frame flag ([#481](https://github.com/alandtse/CommonLibSSE-NG/issues/481)) ([eb172fe](https://github.com/alandtse/CommonLibSSE-NG/commit/eb172fe71c01903388719e8e72445cda37e3e192))
+* **vr:** correct RaceSexMenu direct layout ([#483](https://github.com/alandtse/CommonLibSSE-NG/issues/483)) ([eda0c1b](https://github.com/alandtse/CommonLibSSE-NG/commit/eda0c1b7e3b072a396f2eb01770050a152fdab68))
+
+## [15.7.2](https://github.com/alandtse/CommonLibSSE-NG/compare/v15.7.1...v15.7.2) (2026-11-07)
+
+### Bug Fixes
+
+* **havok:** correct hkpMotion gravityFactor offset ([#484](https://github.com/alandtse/CommonLibSSE-NG/issues/484)) ([fe51a85](https://github.com/alandtse/CommonLibSSE-NG/commit/fe51a85708e305d2c1ca1d622140375402be2966))
+* **weather:** correct precipitation checks ([#482](https://github.com/alandtse/CommonLibSSE-NG/issues/482)) ([40fb19b](https://github.com/alandtse/CommonLibSSE-NG/commit/40fb19b3da0ad00dd17f4237d0e3a16a3f66cad6))
+
+## [15.7.1](https://github.com/alandtse/CommonLibSSE-NG/compare/v15.7.0...v15.7.1) (2026-11-06)
+
+### Bug Fixes
+
+* drop ctors that emit undefined vtables ([#480](https://github.com/alandtse/CommonLibSSE-NG/issues/480)) ([933da2d](https://github.com/alandtse/CommonLibSSE-NG/commit/933da2d1046e4c0073f402cb6a1ea12681bf2884))
+
+## [15.7.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v15.6.0...v15.7.0) (2026-11-05)
+
+### Features
+
+* add NiLightDimmerController and other Ni classes ([#477](https://github.com/alandtse/CommonLibSSE-NG/issues/477)) ([e77efa5](https://github.com/alandtse/CommonLibSSE-NG/commit/e77efa54c797285fb77e1ee63d5a11c050f71643))
+* **LoadedReferenceCollection:** add class ([#478](https://github.com/alandtse/CommonLibSSE-NG/issues/478)) ([a8cfac6](https://github.com/alandtse/CommonLibSSE-NG/commit/a8cfac6675954ac8a99f290953ef00f745612287))
+* name RaceSexMenu fields, add ctor overload ([#476](https://github.com/alandtse/CommonLibSSE-NG/issues/476)) ([bd212d9](https://github.com/alandtse/CommonLibSSE-NG/commit/bd212d99c73943f47b581ef356f293471435abdc))
+
+## [15.6.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v15.5.0...v15.6.0) (2026-11-04)
+
+### Features
+
+* **BGSPackageData:** add int, float, selector ([#473](https://github.com/alandtse/CommonLibSSE-NG/issues/473)) ([8edb8b1](https://github.com/alandtse/CommonLibSSE-NG/commit/8edb8b17408b9f2b6cc34f9da006b2a5b3c9e9c9)), closes [#472](https://github.com/alandtse/CommonLibSSE-NG/issues/472)
+* **BGSPackageData:** add remaining data classes ([#474](https://github.com/alandtse/CommonLibSSE-NG/issues/474)) ([f5ec557](https://github.com/alandtse/CommonLibSSE-NG/commit/f5ec55742dc568c2406adddda5e9ec141d64d1fe)), closes [#473](https://github.com/alandtse/CommonLibSSE-NG/issues/473) [#473](https://github.com/alandtse/CommonLibSSE-NG/issues/473)
+
+### Bug Fixes
+
+* **IPackageData:** InitPackage takes a TESForm* ([#472](https://github.com/alandtse/CommonLibSSE-NG/issues/472)) ([0d556e8](https://github.com/alandtse/CommonLibSSE-NG/commit/0d556e8d0988fcd721604de0daeabb641c344cb2))
+
+## [15.5.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v15.4.0...v15.5.0) (2026-11-02)
+
+### Features
+
+* **ai:** add AI world location and travel state ([#471](https://github.com/alandtse/CommonLibSSE-NG/issues/471)) ([91e285c](https://github.com/alandtse/CommonLibSSE-NG/commit/91e285c5ec4f04d8b389f5b1c8ba44ea6733e395))
+* **BGSLoadFormData:** add form and ref getters ([#470](https://github.com/alandtse/CommonLibSSE-NG/issues/470)) ([0810e33](https://github.com/alandtse/CommonLibSSE-NG/commit/0810e3304fe75a52ed524fc1bcdfad58b1dcf964))
+
+## [15.4.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v15.3.0...v15.4.0) (2026-10-31)
+
+### Features
+
+* **BSSubIndexTriShape:** add segment count ([#467](https://github.com/alandtse/CommonLibSSE-NG/issues/467)) ([97f09ad](https://github.com/alandtse/CommonLibSSE-NG/commit/97f09adee77b669d3ea2966b607a9a97aff7baf1))
+
+### Bug Fixes
+
+* **TESForm:** resolve raw IDs by master position ([#468](https://github.com/alandtse/CommonLibSSE-NG/issues/468)) ([224fa9c](https://github.com/alandtse/CommonLibSSE-NG/commit/224fa9c18ccc862fe33ba9b2f8b2ff1d89cef324))
+
+## [15.3.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v15.2.0...v15.3.0) (2026-10-30)
+
+### Features
+
+* **TESPackage:** add AI condition return enums ([#464](https://github.com/alandtse/CommonLibSSE-NG/issues/464)) ([dc585f5](https://github.com/alandtse/CommonLibSSE-NG/commit/dc585f51e72b093fd3e33d5dc3808f119c78ede7))
+
+### Bug Fixes
+
+* **trampoline:** fill the branch slot before redirecting ([#465](https://github.com/alandtse/CommonLibSSE-NG/issues/465)) ([9c94e63](https://github.com/alandtse/CommonLibSSE-NG/commit/9c94e631db9d865e3a15014c1fbd31340e84cf7f))
+* **vr:** correct IMenu VR layout and target accessor ([#466](https://github.com/alandtse/CommonLibSSE-NG/issues/466)) ([9c04cc7](https://github.com/alandtse/CommonLibSSE-NG/commit/9c04cc7a3e63373d00122cb2396fa7204dd77283))
+
+## [15.2.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v15.1.0...v15.2.0) (2026-10-29)
+
+### Features
+
+* **accumulator:** type VR deferred list ([#462](https://github.com/alandtse/CommonLibSSE-NG/issues/462)) ([e7004bc](https://github.com/alandtse/CommonLibSSE-NG/commit/e7004bc78824fefe04e0ecbfe2baea6807945c67))
+
+### Bug Fixes
+
+* **renderer:** call UpdateCameraData on Renderer ([#463](https://github.com/alandtse/CommonLibSSE-NG/issues/463)) ([c038363](https://github.com/alandtse/CommonLibSSE-NG/commit/c038363fadf3656472888e1b9469dd2244c48816))
+
+## [15.1.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v15.0.1...v15.1.0) (2026-10-29)
+
+### Features
+
+* add rendering engine accessors ([#460](https://github.com/alandtse/CommonLibSSE-NG/issues/460)) ([69d0495](https://github.com/alandtse/CommonLibSSE-NG/commit/69d0495398960bb665647f55e3c803df3b93328a))
+
+### Bug Fixes
+
+* **BSShaderAccumulator:** correct VR layout ([#461](https://github.com/alandtse/CommonLibSSE-NG/issues/461)) ([d7cb908](https://github.com/alandtse/CommonLibSSE-NG/commit/d7cb90891d6f8230be9c7a0d85901d802fc66b3e))
+* **HighActorCuller:** return the static object ([#459](https://github.com/alandtse/CommonLibSSE-NG/issues/459)) ([aef32df](https://github.com/alandtse/CommonLibSSE-NG/commit/aef32dfc4e0655c6a760f48c082ffc915be65fc0))
+
+## [15.0.1](https://github.com/alandtse/CommonLibSSE-NG/compare/v15.0.0...v15.0.1) (2026-10-28)
+
+### Bug Fixes
+
+* **MapMenu:** correct VR runtime tail members ([#458](https://github.com/alandtse/CommonLibSSE-NG/issues/458)) ([5e27d30](https://github.com/alandtse/CommonLibSSE-NG/commit/5e27d30c8d25dafef48c8ebf02269276c5d3a9f1))
+
+## [15.0.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v14.1.0...v15.0.0) (2026-10-27)
+
+### ⚠ BREAKING CHANGES
+
+* **nicamera:** NiCamera::RUNTIME_DATA_VR no longer has viewFrustumArray, eyeViewportRects, eyeViewMatrices, eyeCullingProcs or unk1C8; they sat at the wrong offsets. Use eyeFrustums, eyePositions and eyeRotations (BSTArray of NiFrustum, NiPoint3 and NiMatrix3, one element per eye) and eyeCount instead: viewFrustumArray[i] becomes eyeFrustums[i], and GetNearPlane() is unchanged. eyeViewportRects, eyeViewMatrices and eyeCullingProcs have no replacement because the game has no such data there; code that read them was reading other memory and must be removed. No caller exists in this repo or in the plugin sources checked.
+
+### Features
+
+* **skse:** add GOG and Epic runtime versions ([#454](https://github.com/alandtse/CommonLibSSE-NG/issues/454)) ([8830570](https://github.com/alandtse/CommonLibSSE-NG/commit/8830570fe56cbcd7da509cbdf10a015450dfc4dd))
+
+### Bug Fixes
+
+* **BGSScene:** type isShuttingDown as bool ([#457](https://github.com/alandtse/CommonLibSSE-NG/issues/457)) ([e387f5f](https://github.com/alandtse/CommonLibSSE-NG/commit/e387f5f861a601e8e7cbacf632f6aad9bcb76ff3))
+* **bsresource:** stop releasing the stream twice ([#453](https://github.com/alandtse/CommonLibSSE-NG/issues/453)) ([b8a8cf4](https://github.com/alandtse/CommonLibSSE-NG/commit/b8a8cf4ec3b2287cc84efc210011777b2a546a1f))
+* **nicamera:** correct VR eye array layout ([#456](https://github.com/alandtse/CommonLibSSE-NG/issues/456)) ([a776a41](https://github.com/alandtse/CommonLibSSE-NG/commit/a776a410ab09c2e5e29471d08135843e7af252d7))
+
+## [14.1.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v14.0.1...v14.1.0) (2026-10-27)
+
+### Features
+
+* **cell:** name LOADED_CELL_DATA waterNode ([#452](https://github.com/alandtse/CommonLibSSE-NG/issues/452)) ([fb6cabe](https://github.com/alandtse/CommonLibSSE-NG/commit/fb6cabe088a69958b6dd2b1ca93e241b74409d80))
+
+## [14.0.1](https://github.com/alandtse/CommonLibSSE-NG/compare/v14.0.0...v14.0.1) (2026-10-25)
+
+### Bug Fixes
+
+* **CombatUtilities:** GetAngleToProjectedTarget in 1.7.99+ ([#451](https://github.com/alandtse/CommonLibSSE-NG/issues/451)) ([a3a4bf6](https://github.com/alandtse/CommonLibSSE-NG/commit/a3a4bf69c69cd48ea46bb05899a53c463f2ab111))
+
+## [14.0.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v13.1.0...v14.0.0) (2026-10-24)
+
+### ⚠ BREAKING CHANGES
+
+* **PlayerInputHandler:** PlayerInputHandler::ProcessMotionGesture and ProcessSixaxis take a PlayerControlsData* and return void. Callers must pass the data pointer; no caller exists in this repo or in the plugin sources checked.
+* **PlayerInputHandler:** PlayerInputHandler::Unk_05 and Unk_06 are removed; slots 5 and 6 are ProcessMouseMove and ProcessButton on VR. VR code that called ProcessThumbstick, ProcessMouseMove or ProcessButton through the old indices hit the wrong virtuals and must be rebuilt.
+* **bscullingprocess:** BSCullingProcess::AppendNonAccum and its BSGeometryListCullingProcess and BSParabolicCullingProcess overrides take BSGeometry& instead of NiAVObject&; overrides and callers must change the parameter type.
+
+### Features
+
+* **sky:** give SkyStaticRefData its members ([#447](https://github.com/alandtse/CommonLibSSE-NG/issues/447)) ([297e5cd](https://github.com/alandtse/CommonLibSSE-NG/commit/297e5cd0e224ef61d523a94f3b58da05ff911085))
+
+### Bug Fixes
+
+* **bscullingprocess:** type AppendNonAccum arg ([#442](https://github.com/alandtse/CommonLibSSE-NG/issues/442)) ([c1aa3d9](https://github.com/alandtse/CommonLibSSE-NG/commit/c1aa3d9d8f3afed1dc28493b1c7ff820a1deb7d6))
+* **PlayerInputHandler:** correct VR vtable slots ([#443](https://github.com/alandtse/CommonLibSSE-NG/issues/443)) ([73e8f8c](https://github.com/alandtse/CommonLibSSE-NG/commit/73e8f8c78ad0c5dffdd2c2bac0bba5094b6b6781))
+* **PlayerInputHandler:** type AE gesture slots ([#444](https://github.com/alandtse/CommonLibSSE-NG/issues/444)) ([52d3a8e](https://github.com/alandtse/CommonLibSSE-NG/commit/52d3a8ee803a46916d9f3b8787989340229df9cd))
+
+## [13.1.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v13.0.0...v13.1.0) (2026-10-19)
+
+### Features
+
+* **ae:** add CreateGrassParams 1.7.99 accessors ([#441](https://github.com/alandtse/CommonLibSSE-NG/issues/441)) ([ade595f](https://github.com/alandtse/CommonLibSSE-NG/commit/ade595f0019b01995f92dc5806cebacbca4edb35))
+
+## [13.0.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v12.2.0...v13.0.0) (2026-10-18)
+
+### ⚠ BREAKING CHANGES
+
+* **spellslearned:** SpellsLearned::Event::spell and
+SpellsLearned::SendEvent(SpellItem*) are removed.
+
+### Features
+
+* add AddCellGrassTask and related ([51233b7](https://github.com/alandtse/CommonLibSSE-NG/commit/51233b7390fe3800dac05586bf522f0e51843687))
+* add BSProceduralLightningController and related ([86dbefb](https://github.com/alandtse/CommonLibSSE-NG/commit/86dbefb1f43445045f1b2a1b9e4f0fbde90faed3))
+* add BSProceduralLightningTasklet and related ([dfae4a4](https://github.com/alandtse/CommonLibSSE-NG/commit/dfae4a4ded534cde5a986acb7e9c025e5ba1a53c))
+* add CombatBehavior classes ([8fd1ee2](https://github.com/alandtse/CommonLibSSE-NG/commit/8fd1ee25f4e93380471848df8dca15d4429fbfc1))
+* add CombatBehaviorTreeNode::Ctor ([d121ecf](https://github.com/alandtse/CommonLibSSE-NG/commit/d121ecf419077ba267cf76c096155b4a1c794832))
+* add more combat RE ([0e08b9a](https://github.com/alandtse/CommonLibSSE-NG/commit/0e08b9aef21e334e6b02a6e4d522576e2ebe14c7))
+* add more CombatBehaviorTree stuff ([92cf0c6](https://github.com/alandtse/CommonLibSSE-NG/commit/92cf0c6ee0309a28bd5ae19fcdde29fa76f46549))
+* **gfx:** add GFxCharEvent layout ([#362](https://github.com/alandtse/CommonLibSSE-NG/issues/362)) ([06ec1c5](https://github.com/alandtse/CommonLibSSE-NG/commit/06ec1c54b8bfe99249c5784f400b63b251c9ffa9))
+* more grass RE ([4d48a4f](https://github.com/alandtse/CommonLibSSE-NG/commit/4d48a4f66b378e6af4f5fcdbc9849e3e847351db))
+* projectile stuff ([4964b49](https://github.com/alandtse/CommonLibSSE-NG/commit/4964b49e5ed25ba9a3972ec9957187703c72ad2c))
+* RE BGSAcousticSpaceListener and related ([c30e6e6](https://github.com/alandtse/CommonLibSSE-NG/commit/c30e6e639007e43bba4cd05636fcc084bb68eaac))
+* **water:** add WaterFlag bits read by shader ([#440](https://github.com/alandtse/CommonLibSSE-NG/issues/440)) ([d3e6b5d](https://github.com/alandtse/CommonLibSSE-NG/commit/d3e6b5d7a33081aae8cbd64d569cd3ce0bd1510e))
+
+### Bug Fixes
+
+* **AE:** add missing id for ObjectTypeInfo::ReleaseData ([#359](https://github.com/alandtse/CommonLibSSE-NG/issues/359)) ([34b21de](https://github.com/alandtse/CommonLibSSE-NG/commit/34b21de5b497098bdf7d41071fdd20abe4d027a4))
+* compilation ([84b2e60](https://github.com/alandtse/CommonLibSSE-NG/commit/84b2e601174c39055c226743d5a1c4349c38f970))
+* correct GetWaterFogPassList return type ([#373](https://github.com/alandtse/CommonLibSSE-NG/issues/373)) ([a212a90](https://github.com/alandtse/CommonLibSSE-NG/commit/a212a9095e9052b875e554e6dde5bd131b532c75))
+* fix template ([da1a899](https://github.com/alandtse/CommonLibSSE-NG/commit/da1a89925983eb3c1c79de7979683b091a1f8d37))
+* merge ([32581d3](https://github.com/alandtse/CommonLibSSE-NG/commit/32581d3a9ada9892dd7339d4cc7fcf4abb869042))
+* move and rename Actor::IsLeveled ([dfb5aea](https://github.com/alandtse/CommonLibSSE-NG/commit/dfb5aeac200102c8939d6957c790983befa72333))
+* NiTimeController::Update vfunc ([8eff25e](https://github.com/alandtse/CommonLibSSE-NG/commit/8eff25e12bb3a2496acfa1ba1586eaf9d51a5b71))
+* **papyrus:** invoke latent return type mapper ([#364](https://github.com/alandtse/CommonLibSSE-NG/issues/364)) ([43e19bb](https://github.com/alandtse/CommonLibSSE-NG/commit/43e19bb4f7ed1ebbc9f4c9d656bf89c4c0dcaeba))
+* **re:** correct BSTSmallSharedArray::empty() ([#361](https://github.com/alandtse/CommonLibSSE-NG/issues/361)) ([3c80256](https://github.com/alandtse/CommonLibSSE-NG/commit/3c802562ef39368cb4c9668796cf3bf6b675d94f))
+* restore LoadVertices arg, bound description ([9c391fc](https://github.com/alandtse/CommonLibSSE-NG/commit/9c391fcd920bed2929c24e64d1527e8af416e70a))
+* **spellslearned:** drop bogus Event::spell ([#438](https://github.com/alandtse/CommonLibSSE-NG/issues/438)) ([1893652](https://github.com/alandtse/CommonLibSSE-NG/commit/1893652aa2cc788741707171f782a5de03a01071))
+* template again ([84a6c39](https://github.com/alandtse/CommonLibSSE-NG/commit/84a6c39bbe1667ec0a2c43ed93736b233e33b5ae))
+* typo ([505f514](https://github.com/alandtse/CommonLibSSE-NG/commit/505f514053e5f03b1c435ea5412f4d6671e1b2d3))
+* virtual ArmorRatingVisitorBase dtor ([923eb94](https://github.com/alandtse/CommonLibSSE-NG/commit/923eb94bbec8ea269b3b89c883bfd7df14c47778))
+
+## [12.2.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v12.1.0...v12.2.0) (2026-10-17)
+
+### Features
+
+* **bhkcollisionfilter:** add layer setters ([#434](https://github.com/alandtse/CommonLibSSE-NG/issues/434)) ([c041572](https://github.com/alandtse/CommonLibSSE-NG/commit/c0415723053e121eba320a789b657adcf2a90abf))
+* **BSShaderAccumulator:** add RENDER_FLAG enum ([#436](https://github.com/alandtse/CommonLibSSE-NG/issues/436)) ([c3aa47a](https://github.com/alandtse/CommonLibSSE-NG/commit/c3aa47adb4ca1afbfb6e067ce45ef95580489a3e))
+* **TESObjectCELL:** name all CellState values ([#435](https://github.com/alandtse/CommonLibSSE-NG/issues/435)) ([20efc0d](https://github.com/alandtse/CommonLibSSE-NG/commit/20efc0de728e6badb7ee327ded1256d4a0d8c612))
+
+## [12.1.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v12.0.0...v12.1.0) (2026-10-11)
+
+### Features
+
+* **cmake:** publish a clang-cl prebuilt bundle ([#431](https://github.com/alandtse/CommonLibSSE-NG/issues/431)) ([58a0e61](https://github.com/alandtse/CommonLibSSE-NG/commit/58a0e611bf41653efad5aa3598327d10af4407f7))
+
+## [12.0.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v11.0.0...v12.0.0) (2026-10-11)
+
+### ⚠ BREAKING CHANGES
+
+* **gfx:** name GFxMovieRoot focus/mouse fields (#423)
+* **gfx:** realign GFxASCharacter virtuals (#422)
+
+### Features
+
+* **bslodtrishape:** add LOD trishape classes ([#430](https://github.com/alandtse/CommonLibSSE-NG/issues/430)) ([b165458](https://github.com/alandtse/CommonLibSSE-NG/commit/b1654584a779bb64260cd8f7331f01bfd95e2762))
+* **gfx:** name GFxMovieRoot focus/mouse fields ([#423](https://github.com/alandtse/CommonLibSSE-NG/issues/423)) ([45906d7](https://github.com/alandtse/CommonLibSSE-NG/commit/45906d787a6793d047f05ef03c198ffed847e94e))
+* **niskinpartition:** name draw and bone setter ([#427](https://github.com/alandtse/CommonLibSSE-NG/issues/427)) ([f1cb1c9](https://github.com/alandtse/CommonLibSSE-NG/commit/f1cb1c95dcf35b14f42ff66aba0bfb548a8a5dc1))
+
+### Bug Fixes
+
+* **extradata:** define ExtraDataList ctor and dtor ([#424](https://github.com/alandtse/CommonLibSSE-NG/issues/424)) ([c053727](https://github.com/alandtse/CommonLibSSE-NG/commit/c0537271d661eb78800f36a1e768ff519728fb3b))
+* **gfx:** correct GFxMovieRoot safeRect offset ([#425](https://github.com/alandtse/CommonLibSSE-NG/issues/425)) ([c0c965c](https://github.com/alandtse/CommonLibSSE-NG/commit/c0c965ce036c2da06a1900f10f72edef5e6e3637))
+* **gfx:** realign GFxASCharacter virtuals ([#422](https://github.com/alandtse/CommonLibSSE-NG/issues/422)) ([b0ff9ce](https://github.com/alandtse/CommonLibSSE-NG/commit/b0ff9ce38ba4a63de7058466f0539cac7a3d714d))
+
+## [11.0.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v10.1.0...v11.0.0) (2026-10-04)
+
+### ⚠ BREAKING CHANGES
+
+* **magic:** MagicTarget::GetActiveEffectList is removed in VR-only builds
+(use VisitActiveEffects or GetVRActiveEffectList) and returns nullptr on VR in
+all-runtime builds; derived classes in builds that include VR override
+GetActiveEffectListNative. NonActorMagicTarget and MiddleHighProcessData
+activeEffects change type, and GetNthEffect now returns the nth effect.
+
+Co-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>
+* **VR:** hkbProjectStringData::rootPath is removed; the VR-only
+PlayerControls notifyingHandlers, blockPlayerInput, unk1DA and unk1DC are
+replaced by the VR handler pointers. VR sizes and offsets of the derived input
+handlers change.
+
+Co-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>
+* MapCameraStates::Transition::zoomOrigin is removed,
+MapMenu::AsIMapCameraCallbacks returns nullptr on VR, and the VR LocalMapMenu
+renderer data drops renderTarget and renderMode. VR sizes change for BSThread
+and subclasses, NiGeometryData, FaderData, ImageSpaceShaderParam and MapMenu.
+
+Co-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>
+* BSOcclusionBox::faces is replaced by corners and
+BSOcclusionPlane::frustum by frustumPlanes, VR BSCullingProcess gains
+ClearCollectedGeometry at slot 0x1A so TestBaseVisibility1-3 move up one slot
+there, and the NiAVObject VR layout is corrected.
+
+Co-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>
+* **frustum:** BSCompoundFrustum::functionOperators is now BSTArray<Operator>
+instead of BSTArray<void*>; code indexing it as an array of pointers no longer
+compiles.
+
+Co-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>
+
+### Features
+
+* **frustum:** add BSCompoundFrustum operators ([#412](https://github.com/alandtse/CommonLibSSE-NG/issues/412)) ([c8f5c3b](https://github.com/alandtse/CommonLibSSE-NG/commit/c8f5c3bcb39a1ac060611c5a0cc2fab5b749a8f3))
+* **menutopic:** name seven unknown members ([#409](https://github.com/alandtse/CommonLibSSE-NG/issues/409)) ([e4b418b](https://github.com/alandtse/CommonLibSSE-NG/commit/e4b418bb681e52521d15bed94ab168585631dba0))
+* **quest:** add UpdateCurrentInstanceGlobal ([#408](https://github.com/alandtse/CommonLibSSE-NG/issues/408)) ([95fd8d1](https://github.com/alandtse/CommonLibSSE-NG/commit/95fd8d1bf5f6c8da6f003862f06184513179011b))
+* **VR:** add VR handlers, correct type layouts ([#416](https://github.com/alandtse/CommonLibSSE-NG/issues/416)) ([b5dd12d](https://github.com/alandtse/CommonLibSSE-NG/commit/b5dd12dee701d3382560f9aaa91b85785ac30696))
+
+### Bug Fixes
+
+* correct container layouts and struct sizes ([#419](https://github.com/alandtse/CommonLibSSE-NG/issues/419)) ([59a636e](https://github.com/alandtse/CommonLibSSE-NG/commit/59a636e2b9a62799340364f49974b6d2aeabe4cb))
+* correct occlusion, culling, portal layouts ([#420](https://github.com/alandtse/CommonLibSSE-NG/issues/420)) ([da406d7](https://github.com/alandtse/CommonLibSSE-NG/commit/da406d78849938c11da90f2ab1449f44439a82e1))
+* **decal:** name DECAL_CREATION_DATA fields ([#421](https://github.com/alandtse/CommonLibSSE-NG/issues/421)) ([f47074f](https://github.com/alandtse/CommonLibSSE-NG/commit/f47074fd1bfce89c707d2424ae9db20ac5ca7070))
+* **magic:** use real MagicTarget VR virtuals ([#417](https://github.com/alandtse/CommonLibSSE-NG/issues/417)) ([62a1936](https://github.com/alandtse/CommonLibSSE-NG/commit/62a19369356e73654d8c38d3a8f02fc6c345a17d))
+
+## [10.1.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v10.0.1...v10.1.0) (2026-09-30)
+
+### Features
+
+* `BSScript::Object::~Object` impl ([1730166](https://github.com/alandtse/CommonLibSSE-NG/commit/1730166ecab6e6d3d4b5411b62929d1cfd312e51))
+
+### Bug Fixes
+
+* **actor:** declare VR-only ModifyRotationZ ([#397](https://github.com/alandtse/CommonLibSSE-NG/issues/397)) ([9c6fe61](https://github.com/alandtse/CommonLibSSE-NG/commit/9c6fe616d06744a1c76e4371b07f2a7686616372))
+* **actor:** swap charge refresh ids ([#404](https://github.com/alandtse/CommonLibSSE-NG/issues/404)) ([008515e](https://github.com/alandtse/CommonLibSSE-NG/commit/008515e8e44cebd85a9050f37918f4ca7fb9670c))
+* **AE:** add 1.7 ids for two bindings ([#401](https://github.com/alandtse/CommonLibSSE-NG/issues/401)) ([6d61bd5](https://github.com/alandtse/CommonLibSSE-NG/commit/6d61bd546e9fdb16bb66b133b40b1ac9a68da462))
+* **combatbehavior:** correct AE ids ([#390](https://github.com/alandtse/CommonLibSSE-NG/issues/390)) ([fc0ccee](https://github.com/alandtse/CommonLibSSE-NG/commit/fc0ccee34f5435993faaee185285e51c3a47ddee))
+* **combatbehavior:** handle AE-inlined functions ([#393](https://github.com/alandtse/CommonLibSSE-NG/issues/393)) ([fb8203e](https://github.com/alandtse/CommonLibSSE-NG/commit/fb8203e0d8a38c7e73ca71129e54c1437af7a2fd))
+* **combatbehaviortree:** bind the real constructor ([#389](https://github.com/alandtse/CommonLibSSE-NG/issues/389)) ([e8d43fb](https://github.com/alandtse/CommonLibSSE-NG/commit/e8d43fb3ab7388a8f4238cadb39cbd4ac2b24ff8))
+* **inventory3d:** pass VR device to ToggleItemZoom ([#406](https://github.com/alandtse/CommonLibSSE-NG/issues/406)) ([bec5863](https://github.com/alandtse/CommonLibSSE-NG/commit/bec5863255c14231f55fe5918c11e4c57ba7131f))
+* **inventorychanges:** correct GetItemCount AE ID ([#387](https://github.com/alandtse/CommonLibSSE-NG/issues/387)) ([e56fab0](https://github.com/alandtse/CommonLibSSE-NG/commit/e56fab069ebf93e774a6965d44402f6b6e95ce3e))
+* **inventorychanges:** correct SetUniqueID AE ID ([#385](https://github.com/alandtse/CommonLibSSE-NG/issues/385)) ([724bf92](https://github.com/alandtse/CommonLibSSE-NG/commit/724bf92643d91587099bc9d4b3a2f1996605c13c))
+* **inventoryentrydata:** swap SetWorn SE/AE IDs ([#388](https://github.com/alandtse/CommonLibSSE-NG/issues/388)) ([ebfaf78](https://github.com/alandtse/CommonLibSSE-NG/commit/ebfaf786e765cf33b473c3b938e196a1430ad4fd))
+* **magiccaster:** correct PlayReleaseSound AE ID ([#394](https://github.com/alandtse/CommonLibSSE-NG/issues/394)) ([3a1fdf1](https://github.com/alandtse/CommonLibSSE-NG/commit/3a1fdf117f9f06f39a61649355c905be8c705643))
+* **magic:** correct ForEachActiveEffect ID ([#407](https://github.com/alandtse/CommonLibSSE-NG/issues/407)) ([ad0b9fc](https://github.com/alandtse/CommonLibSSE-NG/commit/ad0b9fc14cf617c25f5df73ffe8ee4f3698402fa))
+* **nitrishape:** move Unk_3B to NiTriShape ([#399](https://github.com/alandtse/CommonLibSSE-NG/issues/399)) ([3e61bdd](https://github.com/alandtse/CommonLibSSE-NG/commit/3e61bdd73a3867a058eefc7da69c25a19205ea87))
+* pass missing arguments to six engine calls ([#402](https://github.com/alandtse/CommonLibSSE-NG/issues/402)) ([3100030](https://github.com/alandtse/CommonLibSSE-NG/commit/31000306ea96d1bf1fdcd14f5f45deb176a31cbb))
+* pass the extra arguments AE 1.7 and VR read ([#403](https://github.com/alandtse/CommonLibSSE-NG/issues/403)) ([7b38593](https://github.com/alandtse/CommonLibSSE-NG/commit/7b38593c08cdcaf60371bb7414ec4f2bd5c7d5f6))
+* **player:** pass the skill advance context ([#405](https://github.com/alandtse/CommonLibSSE-NG/issues/405)) ([82f1550](https://github.com/alandtse/CommonLibSSE-NG/commit/82f155034be31aec56d7c8010d6121cfe173bb46))
+* **scaleform:** use AE 1.6 id for IsValidName ([1736f41](https://github.com/alandtse/CommonLibSSE-NG/commit/1736f41d8c5f24c300014c6ac85ca3c75a9c3946))
+* stop two Dtor() calls freeing their object ([#395](https://github.com/alandtse/CommonLibSSE-NG/issues/395)) ([f298e23](https://github.com/alandtse/CommonLibSSE-NG/commit/f298e231d4958f27cacbbc1bd11dcc553b096a2b))
+* sync change with commonlibsse-ng ([2415cc9](https://github.com/alandtse/CommonLibSSE-NG/commit/2415cc998b611d3f0ac15fcfeadca9c83b1bf7f8))
+* **vr:** correct three virtual slots ([#396](https://github.com/alandtse/CommonLibSSE-NG/issues/396)) ([1fc6c44](https://github.com/alandtse/CommonLibSSE-NG/commit/1fc6c44a0c8a680a14905566d753d0ffcfb32124))
+* **vr:** route shifted virtuals through wrappers ([#398](https://github.com/alandtse/CommonLibSSE-NG/issues/398)) ([de4950e](https://github.com/alandtse/CommonLibSSE-NG/commit/de4950e6807f59b4dc1f782cc44ef90d364d4bd7))
+
+## [10.0.1](https://github.com/alandtse/CommonLibSSE-NG/compare/v10.0.0...v10.0.1) (2026-09-30)
+
+## [10.0.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v9.3.0...v10.0.0) (2026-09-28)
+
+### ⚠ BREAKING CHANGES
+
+* **package:** CreatePackage and SetPackType take PACKAGE_TYPE. Callers
+passing PACKAGE_PROCEDURE_TYPE no longer compile; each such call passed a
+value the engine reads as a different package type.
+
+Co-authored-by: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+
+### Bug Fixes
+
+* **magic:** return the actor from GetTargetActor ([#382](https://github.com/alandtse/CommonLibSSE-NG/issues/382)) ([8702dcf](https://github.com/alandtse/CommonLibSSE-NG/commit/8702dcfd4d7445c0b3ceddee1668eb3edac3f58a))
+* **package:** CreatePackage takes PACKAGE_TYPE ([#383](https://github.com/alandtse/CommonLibSSE-NG/issues/383)) ([2184d3f](https://github.com/alandtse/CommonLibSSE-NG/commit/2184d3f3d9abf6ccde5b41e75ddbd415d0b9cc28))
+
+## [9.3.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v9.2.0...v9.3.0) (2026-09-28)
+
+### Features
+
+* fix NiSkinInstance::Create, add Dismember ([#384](https://github.com/alandtse/CommonLibSSE-NG/issues/384)) ([c23f062](https://github.com/alandtse/CommonLibSSE-NG/commit/c23f062b2c02e86b381408f80ecc89caa473fc66))
+
+## [9.2.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v9.1.0...v9.2.0) (2026-09-27)
+
+### Features
+
+* **state:** add BuildCameraStateData ([#379](https://github.com/alandtse/CommonLibSSE-NG/issues/379)) ([ee6ebeb](https://github.com/alandtse/CommonLibSSE-NG/commit/ee6ebeb02a4575670015e19fe51992b7146145c7))
+
+## [9.1.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v9.0.2...v9.1.0) (2026-09-24)
+
+### Features
+
+* **actor:** add ChangeHeadPart wrapper ([#375](https://github.com/alandtse/CommonLibSSE-NG/issues/375)) ([3ed84ea](https://github.com/alandtse/CommonLibSSE-NG/commit/3ed84ea498d915071659b1c0d6fdf7bab9da6345))
+
+## [9.0.2](https://github.com/alandtse/CommonLibSSE-NG/compare/v9.0.1...v9.0.2) (2026-09-24)
+
+### Bug Fixes
+
+* **shadowstate:** fix constant offset type ([#378](https://github.com/alandtse/CommonLibSSE-NG/issues/378)) ([244562f](https://github.com/alandtse/CommonLibSSE-NG/commit/244562f77935996a184614896c16bc1f8cfcbdb5))
+
+## [9.0.1](https://github.com/alandtse/CommonLibSSE-NG/compare/v9.0.0...v9.0.1) (2026-09-23)
+
+### Bug Fixes
+
+* **actor:** correct GetCurrentAmmo dispatch ([#377](https://github.com/alandtse/CommonLibSSE-NG/issues/377)) ([33e6a96](https://github.com/alandtse/CommonLibSSE-NG/commit/33e6a966001d8c86e52be6e2b38262e6c346353e))
+
+## [9.0.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v8.4.1...v9.0.0) (2026-09-21)
+
+### ⚠ BREAKING CHANGES
+
+* **HitData:** RE::HitData members at 0x74-0x7C are renamed to match
+what the engine stores there; the layout and sizeof are unchanged.
+Migrate as follows:
+
+criticalDamageMult (0x7C) is removed and was actually reflectedDamage
+(0x7C). It holds reflected melee damage, not a crit multiplier.
+reflectedDamage (0x78) is now pushBack (0x78), a knockback force.
+pushBack (0x74) is now unk74.
+For crits, test HitData::Flag::kCritical. The crit bonus is a flat
+value already included in totalDamage and physicalDamage.
+
+### Bug Fixes
+
+* correct GetWaterFogPassList return type ([#373](https://github.com/alandtse/CommonLibSSE-NG/issues/373)) ([3e6ac85](https://github.com/alandtse/CommonLibSSE-NG/commit/3e6ac85263ac0fba608705ecd40765616a5dff79))
+* **HitData:** correct members at 0x74-0x7C ([#374](https://github.com/alandtse/CommonLibSSE-NG/issues/374)) ([a530b29](https://github.com/alandtse/CommonLibSSE-NG/commit/a530b2975417e25c06b1972757fc2a3ee48e2865))
+
+## [8.4.1](https://github.com/alandtse/CommonLibSSE-NG/compare/v8.4.0...v8.4.1) (2026-09-20)
+
+### Bug Fixes
+
+* **batchrenderer:** make SetupAndDrawPass static ([#372](https://github.com/alandtse/CommonLibSSE-NG/issues/372)) ([024eb91](https://github.com/alandtse/CommonLibSSE-NG/commit/024eb91a231043bc6187ae8597b28f8ddeb467b0))
+
+## [8.4.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v8.3.0...v8.4.0) (2026-09-20)
+
+### Features
+
+* **batchrenderer:** add ClearAllRenderPasses ([#371](https://github.com/alandtse/CommonLibSSE-NG/issues/371)) ([0c02d8b](https://github.com/alandtse/CommonLibSSE-NG/commit/0c02d8bf4f404605182032b0fd4ee1678e87e94e))
+
+## [8.3.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v8.2.0...v8.3.0) (2026-09-19)
+
+### Features
+
+* `RE::BSScript::Object::~Object` impl ([#366](https://github.com/alandtse/CommonLibSSE-NG/issues/366)) ([53f4a56](https://github.com/alandtse/CommonLibSSE-NG/commit/53f4a561a953fef2cd792d271a631e6ac66a2d43))
+* **CombatProjectileAimController:** name fields ([#370](https://github.com/alandtse/CommonLibSSE-NG/issues/370)) ([f643c41](https://github.com/alandtse/CommonLibSSE-NG/commit/f643c41b85272e672773bbb4c40c5964d6e8ac9b))
+
+### Bug Fixes
+
+* **niskindata:** keep GetBoneData private ([#369](https://github.com/alandtse/CommonLibSSE-NG/issues/369)) ([e1702ad](https://github.com/alandtse/CommonLibSSE-NG/commit/e1702adb508eca8babcb87b183157da7a6b8b0c7))
+
+## [8.2.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v8.1.0...v8.2.0) (2026-09-18)
+
+### Features
+
+* **actor:** add CombatProjectileAimController ([#368](https://github.com/alandtse/CommonLibSSE-NG/issues/368)) ([8bed776](https://github.com/alandtse/CommonLibSSE-NG/commit/8bed7767fd1b764e674ead359c05fe7e03d710d2))
+
+### Bug Fixes
+
+* **papyrus:** invoke latent return type mapper ([#364](https://github.com/alandtse/CommonLibSSE-NG/issues/364)) ([9b19e69](https://github.com/alandtse/CommonLibSSE-NG/commit/9b19e695a4a7277f7e0059261be8655ce7781219))
+* **vr:** expose inventory-preview array layout ([#367](https://github.com/alandtse/CommonLibSSE-NG/issues/367)) ([4adaaae](https://github.com/alandtse/CommonLibSSE-NG/commit/4adaaaebdc2b026879b2903c68b15fbcfa5ca4ad))
+* **vr:** expose RaceSexMenu runtime data ([#363](https://github.com/alandtse/CommonLibSSE-NG/issues/363)) ([a6af562](https://github.com/alandtse/CommonLibSSE-NG/commit/a6af562bba4f0b8255ab2237013e85ff7f4ac3f5))
+
+## [8.1.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v8.0.1...v8.1.0) (2026-09-16)
+
+### Features
+
+* **gfx:** add GFxCharEvent layout ([#362](https://github.com/alandtse/CommonLibSSE-NG/issues/362)) ([7ffe4f1](https://github.com/alandtse/CommonLibSSE-NG/commit/7ffe4f19ac3d2a294da95690bacfee99ec60e13d))
+
+## [8.0.1](https://github.com/alandtse/CommonLibSSE-NG/compare/v8.0.0...v8.0.1) (2026-09-13)
+
+### Bug Fixes
+
+* **AE:** add missing id for ObjectTypeInfo::ReleaseData ([#359](https://github.com/alandtse/CommonLibSSE-NG/issues/359)) ([bbd0d3f](https://github.com/alandtse/CommonLibSSE-NG/commit/bbd0d3f452575ba310757b141537e8ecc8cf4a78))
+* **re:** correct BSTSmallSharedArray::empty() ([#361](https://github.com/alandtse/CommonLibSSE-NG/issues/361)) ([fd13f06](https://github.com/alandtse/CommonLibSSE-NG/commit/fd13f062878cfb4145dbb2be76485b482eff5831))
+* **skse:** set V5 flag in plugin declarations ([#360](https://github.com/alandtse/CommonLibSSE-NG/issues/360)) ([98c8df0](https://github.com/alandtse/CommonLibSSE-NG/commit/98c8df05f1c05915b16af45181c7638ef925f465)), closes [#310](https://github.com/alandtse/CommonLibSSE-NG/issues/310)
+* **xmake:** define multi-runtime targeting ([#357](https://github.com/alandtse/CommonLibSSE-NG/issues/357)) ([d8d560d](https://github.com/alandtse/CommonLibSSE-NG/commit/d8d560d44f0a0bbcb0a489c7679adb7c65744c49))
+* **xmake:** enable patch-site diagnostics ([#358](https://github.com/alandtse/CommonLibSSE-NG/issues/358)) ([770dc12](https://github.com/alandtse/CommonLibSSE-NG/commit/770dc1210dff859ee2aec2840b7e58ff4c92e109)), closes [#232](https://github.com/alandtse/CommonLibSSE-NG/issues/232)
+
+## [8.0.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v7.5.4...v8.0.0) (2026-09-12)
+
+### ⚠ BREAKING CHANGES
+
+* **re:** Consolidates duplicate BSShaderAccumulator declarations. To migrate:
+- Replace `#include "RE/S/ShaderAccumulator.h"` with `#include "RE/B/BSShaderAccumulator.h"`.
+- Rename `FinishAccumulatingPreResolveDepth` call sites to `FinishAccumulatingDispatch`.
+- Access accumulator flags (`firstPerson`, `drawDecals`) via `GetRuntimeFlags()` instead of `GetRuntimeData()`.
+- Use `GetFlatRuntimeData()` or `GetVRRuntimeData()` for runtime-specific fields prior to the shared render-state tail.
+- Cast or use the scoped `RENDER_MODE` enum when comparing `renderMode`.
+
+Co-authored-by: Claude Code <noreply@anthropic.com>
+
+### Features
+
+* **rex:** add a REX::W32 to SDK type bridge ([#352](https://github.com/alandtse/CommonLibSSE-NG/issues/352)) ([80bf621](https://github.com/alandtse/CommonLibSSE-NG/commit/80bf62138fc7ab94195bbe84610a3e0edeffbfc0))
+
+### Bug Fixes
+
+* **vr:** correct NiCamera runtime offset ([#353](https://github.com/alandtse/CommonLibSSE-NG/issues/353)) ([c919ccc](https://github.com/alandtse/CommonLibSSE-NG/commit/c919cccd978e3e7c45208ea329cce5004c681262))
+
+### Code Refactoring
+
+* **re:** consolidate BSShaderAccumulator ([#332](https://github.com/alandtse/CommonLibSSE-NG/issues/332)) ([38e6399](https://github.com/alandtse/CommonLibSSE-NG/commit/38e6399e56d6b3c297183a2b135818257949a474))
+
+## [7.5.4](https://github.com/alandtse/CommonLibSSE-NG/compare/v7.5.3...v7.5.4) (2026-09-12)
+
+### Bug Fixes
+
+* **input:** correct cached button event layout ([#347](https://github.com/alandtse/CommonLibSSE-NG/issues/347)) ([2994ab4](https://github.com/alandtse/CommonLibSSE-NG/commit/2994ab4f614dcbc69eaedc091da5c6c6e7bcaa78))
+* **input:** correct cached event array offsets ([#348](https://github.com/alandtse/CommonLibSSE-NG/issues/348)) ([0db97a2](https://github.com/alandtse/CommonLibSSE-NG/commit/0db97a2dbb8ed5eaa8e8ee4fd0b058dbc6bc613b))
+* **NiSkinData:** make accessors public ([#349](https://github.com/alandtse/CommonLibSSE-NG/issues/349)) ([2515f86](https://github.com/alandtse/CommonLibSSE-NG/commit/2515f86d1c7afca159653681eb675eedcc39e024))
+
+## [7.5.3](https://github.com/alandtse/CommonLibSSE-NG/compare/v7.5.2...v7.5.3) (2026-09-12)
+
+### Bug Fixes
+
+* **AE:** correct PlayerCharacter 1.7.x accessors ([#343](https://github.com/alandtse/CommonLibSSE-NG/issues/343)) ([15c399d](https://github.com/alandtse/CommonLibSSE-NG/commit/15c399d7fb22d70706303066f471618022cf4baa))
+
+## [7.5.2](https://github.com/alandtse/CommonLibSSE-NG/compare/v7.5.1...v7.5.2) (2026-09-11)
+
+## [7.5.1](https://github.com/alandtse/CommonLibSSE-NG/compare/v7.5.0...v7.5.1) (2026-09-09)
+
+### Bug Fixes
+
+* **runtime:** fix BSMultiStreamInstanceTriShape vtable ([#341](https://github.com/alandtse/CommonLibSSE-NG/issues/341)) ([16e4761](https://github.com/alandtse/CommonLibSSE-NG/commit/16e4761aed090ffbd3a39da7fb9679be6476028d))
+
+## [7.5.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v7.4.0...v7.5.0) (2026-09-09)
+
+### Features
+
+* `LocksPicked` ([4f21540](https://github.com/alandtse/CommonLibSSE-NG/commit/4f2154008b77894d66d8c890a5e3e8ae0057dce3))
+* `TESObjectREFR::AddLockChange` ([7fa99e8](https://github.com/alandtse/CommonLibSSE-NG/commit/7fa99e800930fc6a602f770e752a4467261fd294))
+* add Actor::GetControllingActor ([ce850df](https://github.com/alandtse/CommonLibSSE-NG/commit/ce850df09307e23ec768fc54cf78558b373565c5))
+* add audio reset lifecycle helpers ([a4df64c](https://github.com/alandtse/CommonLibSSE-NG/commit/a4df64c56e8bb335cb4a60b75b8454afb68f8eef))
+* add BGSAutoWater 💀 ([e34b20a](https://github.com/alandtse/CommonLibSSE-NG/commit/e34b20a989bc7dfa33ef2b96d7978277aab149b3))
+* add BGSAutoWater funcs ([a098919](https://github.com/alandtse/CommonLibSSE-NG/commit/a098919baf6078af398c351298885d7e94cff51f))
+* add cubemap rendering RE ([72db577](https://github.com/alandtse/CommonLibSSE-NG/commit/72db5778b1f555d33dd8f08e56e4db72c91cc66f))
+* add SE IDs ([0687032](https://github.com/alandtse/CommonLibSSE-NG/commit/0687032b3d821c89cf0d4b0c7f7bc906ffa4f7e6))
+* add support for SKSE64 preloading ([e51effc](https://github.com/alandtse/CommonLibSSE-NG/commit/e51effcdc7f28113284808276ec4fcf49e858e44))
+* AttackBlockHandler BSFixedStrings ([5466340](https://github.com/alandtse/CommonLibSSE-NG/commit/5466340bf1dbee7476f5b1e6bd473ce0dc1967e1))
+* complete renderer target RE ([6e32b28](https://github.com/alandtse/CommonLibSSE-NG/commit/6e32b288faafe35d7dde3d4b4af09175a0a16427))
+* even more terrain RE ([b2d0030](https://github.com/alandtse/CommonLibSSE-NG/commit/b2d0030fcccb2482f7a89236285130dea8cee8eb))
+* expose inventory materialization helpers ([ecefba2](https://github.com/alandtse/CommonLibSSE-NG/commit/ecefba215dd65227e4c6c564c7fc8cdf6f70f856))
+* expose inventory refresh helpers ([9b1842b](https://github.com/alandtse/CommonLibSSE-NG/commit/9b1842bf2592820398caeba5efd4e24a7b7710a7))
+* expose renderer lighting RE ([2a282f3](https://github.com/alandtse/CommonLibSSE-NG/commit/2a282f358e552661782cbcf47675e59840a8ce68))
+* havok RE ([2db5b02](https://github.com/alandtse/CommonLibSSE-NG/commit/2db5b02657cc636aa8f7e9ae5c0790e76efa725e))
+* misc RE ([4229a36](https://github.com/alandtse/CommonLibSSE-NG/commit/4229a36ea348a8b5ccc9411fc55be714b485f076))
+* misc RE ([7b3a736](https://github.com/alandtse/CommonLibSSE-NG/commit/7b3a73642c8080b6911b8cd2f4436c68cc877650))
+* misc RE ([adad57b](https://github.com/alandtse/CommonLibSSE-NG/commit/adad57b5d445768f8b0c95dd8bca1ccba1b00a5b))
+* more havok ([899b593](https://github.com/alandtse/CommonLibSSE-NG/commit/899b593206bd1e0023a6f05a3d168adf832db88a))
+* more terrain RE ([6bf4ed3](https://github.com/alandtse/CommonLibSSE-NG/commit/6bf4ed38e18a1b7435db30f44cbd3c020079c59f))
+* more terrain RE ([67094da](https://github.com/alandtse/CommonLibSSE-NG/commit/67094dad27d8d8918021121f7fba86902afe34ec))
+* more TerrainDB RE ([0e2bc8d](https://github.com/alandtse/CommonLibSSE-NG/commit/0e2bc8d73d0d9437aea1e239ccabf2e66e4b8186))
+* name inventory update state ([830bf85](https://github.com/alandtse/CommonLibSSE-NG/commit/830bf85bbed61bcbf06628869d8057b64a5a4c16))
+* RE Cursed Terrain stuff ([680a927](https://github.com/alandtse/CommonLibSSE-NG/commit/680a9271e797ee43661ca89de3c2ebc7b6a1a381))
+* render world functions RE ([de8d426](https://github.com/alandtse/CommonLibSSE-NG/commit/de8d4261588934ed50b907a6b3ee7b098c602d6e))
+
+### Bug Fixes
+
+* 1.5 guards in `API.h`, `Interfaces.cpp/h` ([89122a9](https://github.com/alandtse/CommonLibSSE-NG/commit/89122a97e82353a05b7360e75e3db94b6b663d73))
+* bscubemapcamera ([11608df](https://github.com/alandtse/CommonLibSSE-NG/commit/11608df4779238bde905ec62adca2498f282438f))
+* BSInputEventQueue ([6787250](https://github.com/alandtse/CommonLibSSE-NG/commit/67872501455efc70fc17967332015561bd184a3a))
+* compilation ([53e6783](https://github.com/alandtse/CommonLibSSE-NG/commit/53e67835c25143c256f9aea325af7945b7ebfb88))
+* correct SE cubemap renderer relocations ([8abfc5b](https://github.com/alandtse/CommonLibSSE-NG/commit/8abfc5b5a6386bf1325087c6849cbcc494a831dc))
+* disable defualt log output for 1.5 ([0dbea7c](https://github.com/alandtse/CommonLibSSE-NG/commit/0dbea7cbb049daf969e2e43bcbaa549ec6bf68ef))
+* FOCollisionListener dtor offset ([6db86b5](https://github.com/alandtse/CommonLibSSE-NG/commit/6db86b5c43916f3a812d015633b84ef00e4a1907))
+* hkpContactMgr::type ([33c13a6](https://github.com/alandtse/CommonLibSSE-NG/commit/33c13a6d340b7f657cb0963319bed956970f2fac))
+* includes in BSImagespaceShader, BSShader, and ImageSpaceEffect headers ([9c4cede](https://github.com/alandtse/CommonLibSSE-NG/commit/9c4cedef1ae2cfbfdb74bf554746a54fff67a83e))
+* InputDevices and related ([f6d0882](https://github.com/alandtse/CommonLibSSE-NG/commit/f6d0882451a48df733d3d48c8e1e92115dc3a117))
+* MessageBoxMenu::Create ID ([c5f7edf](https://github.com/alandtse/CommonLibSSE-NG/commit/c5f7edf096f110ac4cb3f5977a482b7e6a82d36a))
+* minor tweaks ([667d2b5](https://github.com/alandtse/CommonLibSSE-NG/commit/667d2b5efbbf8cea635c5a90c45b071e73cec668))
+* more cleanup ([5f77de8](https://github.com/alandtse/CommonLibSSE-NG/commit/5f77de80924fcaa5cbc02efcfa82b5c33ee58891))
+* revert disabling log by default for 1.5 ([fd6cf95](https://github.com/alandtse/CommonLibSSE-NG/commit/fd6cf95bc8cba312088659548588dc4fca49cac4))
+* Sky->IsRaining and sky->IsSnowing ([3701442](https://github.com/alandtse/CommonLibSSE-NG/commit/37014424657a21d5ca8ae7ab41a7564a39cdf2ad))
+* sort `API` funcs ([83658ea](https://github.com/alandtse/CommonLibSSE-NG/commit/83658ea53868bcc9c73259516e791b319faac26f))
+* **sync:** correct RE discrepancies, build gaps, and CI overlay-ports ([f3662ac](https://github.com/alandtse/CommonLibSSE-NG/commit/f3662acd7bbe9bfda5b0841859c5d29696413236))
+* **sync:** restore SKSE::log::init() lost in the merge ([df27da7](https://github.com/alandtse/CommonLibSSE-NG/commit/df27da78daa780259f92d3c61ecf6c927bb18225))
+* **sync:** runtime-dispatch SE/AE layout divergence, drop TODOs ([72c7031](https://github.com/alandtse/CommonLibSSE-NG/commit/72c7031a15f159fc230bceeea38f1eb5bb9673b3))
+* TES class ([313cda9](https://github.com/alandtse/CommonLibSSE-NG/commit/313cda9bc14403aa20bd9be3692de26d2111a547))
+* wrong BSTScatterTableFixedParent order ([cba1063](https://github.com/alandtse/CommonLibSSE-NG/commit/cba1063ddd982a97620e8da4232831ed486a010c))
+
+## [7.4.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v7.3.0...v7.4.0) (2026-09-07)
+
+### Features
+
+* **water:** add BGSWaterCollisionManager types ([#338](https://github.com/alandtse/CommonLibSSE-NG/issues/338)) ([f684855](https://github.com/alandtse/CommonLibSSE-NG/commit/f68485576df7faf8b41026a09e3fde925031243f))
+
+## [7.3.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v7.2.0...v7.3.0) (2026-09-07)
+
+### Features
+
+* **decal:** add BGSDecalManager::ApplyDecal binding ([#335](https://github.com/alandtse/CommonLibSSE-NG/issues/335)) ([6b1eac1](https://github.com/alandtse/CommonLibSSE-NG/commit/6b1eac17721e8ae13656cce25a598753487bd8a0))
+
+### Bug Fixes
+
+* **variable:** pack null handles as typed None ([#337](https://github.com/alandtse/CommonLibSSE-NG/issues/337)) ([e44731e](https://github.com/alandtse/CommonLibSSE-NG/commit/e44731e04d255d7e2f0f66f369cf6f3ee6b23223))
+
+## [7.2.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v7.1.0...v7.2.0) (2026-09-03)
+
+### Features
+
+* **actor:** add PlayerCharacter::StartWaiting/Actor::StartSleeping ([#331](https://github.com/alandtse/CommonLibSSE-NG/issues/331)) ([8492509](https://github.com/alandtse/CommonLibSSE-NG/commit/84925090fc813f70686c27fae650933453af574e))
+* **menu:** add MenuEventHandlerEx adapter ([#329](https://github.com/alandtse/CommonLibSSE-NG/issues/329)) ([140b776](https://github.com/alandtse/CommonLibSSE-NG/commit/140b776e4fc11095d6f172f594e899076b9c9886))
+
+### Bug Fixes
+
+* **vr:** correct render-mode 24 enum name ([#330](https://github.com/alandtse/CommonLibSSE-NG/issues/330)) ([f905c52](https://github.com/alandtse/CommonLibSSE-NG/commit/f905c520a402b6891ab4c4f00184024681571664))
+
+## [7.1.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v7.0.0...v7.1.0) (2026-09-02)
+
+### Features
+
+* **havok:** expand havok RE coverage, fix 2 layout bugs ([#327](https://github.com/alandtse/CommonLibSSE-NG/issues/327)) ([231543d](https://github.com/alandtse/CommonLibSSE-NG/commit/231543d61bc511865f1954f3eb2768732452c1d6))
+
+### Bug Fixes
+
+* **inventory:** default IItemChangeVisitor dtors ([#328](https://github.com/alandtse/CommonLibSSE-NG/issues/328)) ([8339e6d](https://github.com/alandtse/CommonLibSSE-NG/commit/8339e6d37f66448144d8ee25afb6a0e1a5486bea))
+* **vr:** correct PlayerCharacter VR/perk-entry-point layout ([#326](https://github.com/alandtse/CommonLibSSE-NG/issues/326)) ([b105ce1](https://github.com/alandtse/CommonLibSSE-NG/commit/b105ce17a26152a36d501a2debb50ea44aac9fac))
+
+## [7.0.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v6.8.0...v7.0.0) (2026-08-30)
+
+### ⚠ BREAKING CHANGES
+
+* **state:** direct state->frameCount / ->insideFrame / ->useEarlyZ access no longer compiles on ENABLE_SKYRIM_AE builds; use State::GetFrameCount() / GetInsideFrame() / GetUseEarlyZ() instead.
+
+Co-authored-by: Claude Sonnet 5 <noreply@anthropic.com>
+
+### Bug Fixes
+
+* **state:** version AE>=1.7.99 frame fields ([#325](https://github.com/alandtse/CommonLibSSE-NG/issues/325)) ([86adeb8](https://github.com/alandtse/CommonLibSSE-NG/commit/86adeb8fba59f88aa613185bf10c90442bb41241))
+
+## [6.8.0](https://github.com/alandtse/CommonLibSSE-NG/compare/v6.7.1...v6.8.0) (2026-08-30)
+
+### Features
+
+* **ni:** type NiBinaryExtraData/BSFaceGenBaseMorphExtraData ([#323](https://github.com/alandtse/CommonLibSSE-NG/issues/323)) ([ef8d249](https://github.com/alandtse/CommonLibSSE-NG/commit/ef8d249e805c82d4833ff7713ae1c2e7daf2ece3))
+* **ni:** type NiTriShapeData/NiTriStripsData/NiTriStrips ([#322](https://github.com/alandtse/CommonLibSSE-NG/issues/322)) ([8fb03ef](https://github.com/alandtse/CommonLibSSE-NG/commit/8fb03eff4cfad6b2a7976df7760783e030555a57))
+* **racesexmenu:** type headPart/slider fields ([#321](https://github.com/alandtse/CommonLibSSE-NG/issues/321)) ([8eccdad](https://github.com/alandtse/CommonLibSSE-NG/commit/8eccdad356726dc0f1d3449786c58d636242eb3f))
+
+### Bug Fixes
+
+* **menu:** correct AE id for BSTArray overload ([#317](https://github.com/alandtse/CommonLibSSE-NG/issues/317)) ([73a196a](https://github.com/alandtse/CommonLibSSE-NG/commit/73a196ab74a35bb67a12a9e27b4b715b01888b07))
+
 ## [6.7.1](https://github.com/alandtse/CommonLibSSE-NG/compare/v6.7.0...v6.7.1) (2026-08-26)
 
 ### Bug Fixes

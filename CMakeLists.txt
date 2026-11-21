@@ -24,7 +24,7 @@ endif()
 project(
 	CommonLibSSE
 	LANGUAGES CXX
-	VERSION 6.7.1
+	VERSION 16.10.0
 )
 
 include(CheckIPOSupported)
@@ -301,7 +301,8 @@ target_link_libraries(
 	DXGI.lib
 	ole32.lib
 	version.lib
-	"$<$<BOOL:${ENABLE_SKYRIM_VR}>:${OPENVR_LIB_DIR}/openvr_api.lib>"
+	"$<BUILD_INTERFACE:$<$<BOOL:${ENABLE_SKYRIM_VR}>:${OPENVR_LIB_DIR}/openvr_api.lib>>"
+	"$<INSTALL_INTERFACE:$<$<BOOL:${ENABLE_SKYRIM_VR}>:$<INSTALL_PREFIX>/${CMAKE_INSTALL_LIBDIR}/openvr_api.lib>>"
 )
 
 if(MSVC)
@@ -337,9 +338,22 @@ configure_file(
 )
 
 install(
-	FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+	FILES
+	"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+	"cmake/${PROJECT_NAME}.cmake"
 	DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
 )
+
+if(ENABLE_SKYRIM_VR)
+	install(
+		FILES "${OPENVR_INCLUDE_DIR}/openvr.h"
+		DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+	)
+	install(
+		FILES "${OPENVR_LIB_DIR}/openvr_api.lib"
+		DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+	)
+endif()
 
 install(
 	DIRECTORY

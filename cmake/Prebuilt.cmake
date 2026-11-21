@@ -180,14 +180,14 @@ function(commonlib_resolve_prebuilt out_dir)
         return()
     endif()
 
-    # Published bundles use MSVC; other compilers must build from source.
+    # Published bundles support MSVC and clang-cl with matching compiler metadata.
     _commonlib_toolchain_id(_toolchain)
-    if(NOT _toolchain STREQUAL "msvc")
+    if(_toolchain STREQUAL "other")
         return()
     endif()
 
     set(_base "https://github.com/alandtse/CommonLibSSE-NG/releases/download/${_tag}")
-    set(_asset "commonlibsse-ng-prebuilt-${_tag}-all-msvc-cmake.zip")
+    set(_asset "commonlibsse-ng-prebuilt-${_tag}-all-${_toolchain}-cmake.zip")
     set(_zip "${_cache}.zip")
     file(DOWNLOAD "${_base}/${_asset}.sha256" "${_cache}.sha256" STATUS _s1)
     list(GET _s1 0 _s1code)

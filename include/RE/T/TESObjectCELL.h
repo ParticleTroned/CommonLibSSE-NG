@@ -88,7 +88,7 @@ namespace RE
 		NiPointer<NiNode>                                    lightMarkerNode;         // 010 - smart ptr
 		NiPointer<NiNode>                                    soundMarkerNode;         // 018 - smart ptr
 		NiPointer<NiNode>                                    multiBoundNode;          // 020 - smart ptr
-		std::uint64_t                                        unk028;                  // 028
+		NiAVObject*                                          waterNode;               // 028 - raw pointer set by BGSAutoWater, not ref-counted
 		std::uint64_t                                        unk030;                  // 030
 		std::uint64_t                                        unk038;                  // 038
 		BSTArray<ObjectRefHandle>                            unk040;                  // 040
@@ -139,6 +139,13 @@ namespace RE
 
 		enum class CellState
 		{
+			kUnloaded = 0,
+			kUnloading = 1,
+			kDataLoaded = 2,
+			kBuilding3D = 3,
+			kUnattached = 4,
+			kDetaching = 5,
+			kAttaching = 6,
 			kAttached = 7
 		};
 
@@ -202,6 +209,7 @@ namespace RE
 		void                                ForEachReferenceInRange(const NiPoint3& a_origin, float a_radius, std::function<BSContainer::ForEachResult(TESObjectREFR*)> a_callback) const;
 		[[nodiscard]] EXTERIOR_DATA*        GetCoordinates();
 		[[nodiscard]] TESFaction*           GetFactionOwner();
+		[[nodiscard]] TESObjectLAND*        GetLand() const;
 		[[nodiscard]] INTERIOR_DATA*        GetLighting();
 		[[nodiscard]] BGSLocation*          GetLocation() const;
 		[[nodiscard]] float                 GetNorthRotation();

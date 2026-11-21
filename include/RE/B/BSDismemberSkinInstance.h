@@ -16,7 +16,7 @@ namespace RE
 		{
 		public:
 			// members
-			bool          editorVisible;    // 0
+			bool          visible;          // 0
 			bool          startNetBoneSet;  // 1
 			std::uint16_t slot;             // 2 - https://wiki.nexusmods.com/index.php/Skyrim_bodyparts_number
 		};
@@ -48,6 +48,8 @@ namespace RE
 		void          SaveBinary(NiStream& a_stream) override;            // 1B
 		bool          IsEqual(NiObject* a_object) override;               // 1C
 		void          Unk_25(void) override;                              // 25
+
+		static BSDismemberSkinInstance* Create();
 
 		void UpdateDismemberPartion(std::uint16_t a_slot, bool a_enable)
 		{

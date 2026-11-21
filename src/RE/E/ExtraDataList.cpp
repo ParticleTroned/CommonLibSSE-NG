@@ -25,11 +25,29 @@ namespace RE
 	BaseExtraList::~BaseExtraList()
 	{
 		using func_t = void (*)(BaseExtraList*);
-		static REL::Relocation<func_t> func{ REL::ID(11572) };
+		static REL::Relocation<func_t> func{ REL::ID(11438) };
 		func(this);
 	}
 #endif
 	// AE-exclusive dtor is `= default` virtual in header; game vtable handles real cleanup.
+
+	ExtraDataList::ExtraDataList()
+	{
+		using func_t = void(ExtraDataList*);
+		REL::Relocation<func_t> func{ RELOCATION_ID(11437, 11583) };
+		func(this);
+	}
+
+#if defined(EXCLUSIVE_SKYRIM_SE) || defined(EXCLUSIVE_SKYRIM_VR)
+	ExtraDataList::~ExtraDataList() = default;
+#else
+	ExtraDataList::~ExtraDataList()
+	{
+		using func_t = void(ExtraDataList*);
+		REL::Relocation<func_t> func{ RELOCATION_ID(11438, 11584) };
+		func(this);
+	}
+#endif
 
 	bool BaseExtraList::PresenceBitfield::HasType(std::uint32_t a_type) const
 	{
@@ -302,6 +320,13 @@ namespace RE
 		using func_t = decltype(&ExtraDataList::HasQuestObjectAlias);
 		static REL::Relocation<func_t> func{ RELOCATION_ID(11913, 12052) };
 		return func(this);
+	}
+
+	bool ExtraDataList::IsInventoryStackable(bool a_ignoreWorn) const
+	{
+		using func_t = decltype(&ExtraDataList::IsInventoryStackable);
+		static REL::Relocation<func_t> func{ RELOCATION_ID(11452, 11598) };
+		return func(this, a_ignoreWorn);
 	}
 
 	void ExtraDataList::SetActivateParent(TESObjectREFR* a_parentRef, float a_delay)

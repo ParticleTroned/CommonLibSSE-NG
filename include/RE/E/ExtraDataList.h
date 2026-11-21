@@ -40,6 +40,8 @@ namespace RE
 
 		[[nodiscard]] const PresenceBitfield*& GetPresence() const noexcept;
 
+		// Cross-runtime builds take the virtual-dtor branch below: members sit 8 bytes higher
+		// than on SE/VR, with the same total size.
 #if defined(EXCLUSIVE_SKYRIM_SE) || defined(EXCLUSIVE_SKYRIM_VR)
 		~BaseExtraList();  // 00
 
@@ -209,6 +211,7 @@ namespace RE
 		ObjectRefHandle       GetTeleportLinkedDoor();
 		bool                  GetWorn() const;
 		bool                  HasQuestObjectAlias();
+		[[nodiscard]] bool    IsInventoryStackable(bool a_ignoreWorn) const;
 		void                  SetActivateParent(TESObjectREFR* a_parentRef, float a_delay);
 		void                  SetCount(std::uint16_t a_count);
 		void                  SetEnchantment(EnchantmentItem* a_enchantment, std::uint16_t a_chargeAmount, bool a_removeOnUnequip);

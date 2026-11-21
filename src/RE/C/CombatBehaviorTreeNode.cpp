@@ -2,11 +2,11 @@
 
 namespace RE
 {
-	CombatBehaviorTreeNode::CombatBehaviorTreeNode()
+	CombatBehaviorTreeNode* CombatBehaviorTreeNode::Ctor()
 	{
 		using func_t = CombatBehaviorTreeNode*(CombatBehaviorTreeNode*);
-		static REL::Relocation<func_t> func{ RELOCATION_ID(46301, 0) };
-		func(this);
+		static REL::Relocation<func_t> func{ RELOCATION_ID(46301, 47545) };
+		return func(this);
 	}
 
 	void CombatBehaviorTreeNode::AddChild(CombatBehaviorTreeNode* a_child)
@@ -26,14 +26,14 @@ namespace RE
 	CombatBehaviorTreeNode* CombatBehaviorTreeNode::FindChild(const BSFixedString& ch_name) const
 	{
 		using func_t = decltype(&CombatBehaviorTreeNode::FindChild);
-		static REL::Relocation<func_t> func{ RELOCATION_ID(46306, 0) };
+		static REL::Relocation<func_t> func{ RELOCATION_ID(46306, 47550) };
 		return func(this, ch_name);
 	}
 
 	int32_t CombatBehaviorTreeNode::FindChildIndex(const BSFixedString& ch_name) const
 	{
 		using func_t = decltype(&CombatBehaviorTreeNode::FindChildIndex);
-		static REL::Relocation<func_t> func{ RELOCATION_ID(46307, 0) };
+		static REL::Relocation<func_t> func{ RELOCATION_ID(46307, 47551) };
 		return func(this, ch_name);
 	}
 

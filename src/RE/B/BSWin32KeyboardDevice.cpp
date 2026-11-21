@@ -1,5 +1,7 @@
 #include "RE/B/BSWin32KeyboardDevice.h"
 
+#include <REX/W32/USER32.h>
+
 namespace RE
 {
 	bool BSWin32KeyboardDevice::IsPressed(std::uint32_t a_keyCode) const
@@ -42,16 +44,5 @@ namespace RE
 			break;
 		}
 		return Key::kNone;
-	}
-
-	BSWin32KeyboardDevice::BSWin32KeyboardDevice() :
-		BSKeyboardDevice()
-	{
-		auto& rt = GetRuntimeData();
-		rt.dInputDevice = nullptr;
-		std::memset(rt.diObjData, 0, sizeof(rt.diObjData));
-		std::memset(rt.prevState, 0, sizeof(rt.prevState));
-		std::memset(rt.curState, 0, sizeof(rt.curState));
-		rt.capsLockOn = false;
 	}
 }

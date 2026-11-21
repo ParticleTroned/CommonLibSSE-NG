@@ -55,6 +55,12 @@ option("skse_xbyak", function()
     add_defines("SKSE_SUPPORT_XBYAK=1")
 end)
 
+option("skse_patch_safety", function()
+    set_default(true)
+    set_description("Enable trampoline patch-site diagnostics")
+    add_defines("SKSE_SUPPORT_PATCH_SAFETY=1")
+end)
+
 option("tests", function()
     set_default(false)
     set_description("Enable building unit tests")
@@ -86,8 +92,14 @@ if has_config("skyrim_vr") then
 end
 
 target("commonlibsse-ng", function()
-    -- Select after compiler resolution but before PCH rules configure source compilation.
-    -- Keep source settings below: phony targets ignore source files.
+    -- Prebuilt mode: when a prebuilt `lib/commonlibsse-ng.lib` is available — a bundle
+    -- shipped alongside this xmake.lua, or one auto-fetched for a clean release tag — the
+    -- target links that static library (phony) instead of compiling src/. Consumers keep
+    -- using `includes(...)` + the `commonlibsse-ng.plugin` rule unchanged; the only
+    -- difference is zero recompile. The decision is made in on_load (not at parse) so the
+    -- network fetch can run and so any failure falls back cleanly to a normal source build.
+    -- (A phony target ignores add_files, so the source configuration below is harmless in
+    -- prebuilt mode and can stay unconditional.)
     set_kind("static")
 
     before_config(function(target)
@@ -145,17 +157,18 @@ target("commonlibsse-ng", function()
             return nil
         end
 
-        -- Use xmake's runtime inputs before its configuration rules select compiler flags.
         local runtimes = table.wrap(target:get("runtimes") or get_config("runtimes")
             or get_config("vs_runtime") or target:policy("build.c++.msvc.runtime"))
         local compatible = is_mode("releasedbg") and target:is_arch("x64", "x86_64")
             and #runtimes == 1 and runtimes[1] == "MD"
             and has_config("skyrim_se") and has_config("skyrim_ae") and has_config("skyrim_vr")
+            and has_config("skse_patch_safety")
             and not has_config("rex_json") and not has_config("rex_toml")
-        -- Toolchain names can hide compiler overrides; the MSVC bundle requires the actual cl tool.
+        -- Compiler overrides can hide behind an MSVC toolchain name.
         local prebuiltdir = compatible and target:has_tool("cxx", "cl") and resolve() or nil
         if prebuiltdir then
             target:set("kind", "phony")
+            target:data_set("commonlib.prebuiltdir", prebuiltdir)
             target:add("linkdirs", path.join(prebuiltdir, "lib"), { public = true })
             target:add("links", "commonlibsse-ng", { public = true })
             target:add("syslinks", "advapi32", "bcrypt", "d3d11", "d3dcompiler", "dbghelp", "dxgi", "ole32", "shell32", "user32", "version", { public = true })
@@ -168,6 +181,28 @@ target("commonlibsse-ng", function()
             -- pcxxheader, so set the PCH here rather than unconditionally.
             target:set("pcxxheader", path.join(target:scriptdir(), "include", "SKSE", "Impl", "PCH.h"))
 
+            if has_config("skse_patch_safety") then
+                local cachedir = path.join(target:autogendir(), "minhook-v1.3.4")
+                local hde = path.join(cachedir, "minhook-1.3.4", "src", "hde")
+                if not os.isfile(path.join(cachedir, ".complete")) then
+                    import("net.http")
+                    import("utils.archive")
+                    local arch = os.tmpfile() .. ".tar.gz"
+                    try { function()
+                        http.download("https://github.com/TsudaKageyu/minhook/archive/refs/tags/v1.3.4.tar.gz", arch)
+                        assert(hash.sha256(arch) == "1aebeae4ca898330c507860acc2fca2eb335fe446a3a2b8444c3bf8b2660a14e",
+                            "MinHook v1.3.4 sha256 verification failed")
+                        archive.extract(arch, cachedir)
+                    end, finally { function(ok, errors)
+                        os.tryrm(arch)
+                        if not ok then raise(errors) end
+                    end } }
+                    io.writefile(path.join(cachedir, ".complete"), "")
+                end
+                target:add("files", path.join(hde, "hde64.c"))
+                target:add("includedirs", hde)
+            end
+
             -- The embedded license notice (src/REL/Module.cpp) wants a version string.
             -- Derive it from the git tag rather than tracking a second, manually-synced
             -- version number -- CMake's PROJECT_VERSION is itself just a mirror of the
@@ -179,8 +214,30 @@ target("commonlibsse-ng", function()
             end }
             target:add("defines", "COMMONLIB_VERSION=\"" .. (version and version:trim() or "unknown") .. "\"")
         end
+    end)
 
-        -- Source checkouts supply their own openvr headers; binary-only bundles carry a copy.
+    -- Once options are resolved: if we're on a prebuilt, refuse an ABI-incompatible config,
+    -- and supply openvr headers from the bundle when the nested openvr submodule isn't
+    -- checked out. Only the skyrim runtime set is layout-critical (linking the fixed lib while
+    -- compiling ENABLE_SKYRIM_* headers differently is a silent ABI break). rex_ini and
+    -- skse_xbyak are additive — the baked lib is a superset, and this target only adds their
+    -- defines/packages when the consumer enables them — so a consumer may leave them off.
+    -- rex_json/toml are baked off, so the lib lacks those symbols and they must stay off.
+    on_config(function(target)
+        if target:kind() ~= "phony" then return end
+        local required = {
+            skyrim_se = true, skyrim_ae = true, skyrim_vr = true,
+            rex_json = false, rex_toml = false, skse_patch_safety = true,
+        }
+        for opt, want in pairs(required) do
+            local got = has_config(opt) and true or false
+            if got ~= want then
+                raise("prebuilt commonlibsse-ng.lib requires %s=%s, but the consumer has %s=%s. "
+                    .. "Match the baked config (skyrim all; rex_json/toml off; patch safety on; see PREBUILT.md) "
+                    .. "or build from source.", opt, want and "y" or "n", opt, got and "y" or "n")
+            end
+        end
+        local prebuiltdir = target:data("commonlib.prebuiltdir")
         if has_config("skyrim_vr") and prebuiltdir
             and not os.isdir(path.join(target:scriptdir(), "extern", "openvr", "headers")) then
             target:add("includedirs", path.join(prebuiltdir, "extern", "openvr", "headers"), { public = true })
@@ -197,7 +254,7 @@ target("commonlibsse-ng", function()
     if has_config("skyrim_vr") then
         add_packages("rapidcsv", { public = true })
         -- Source-tree openvr headers (added only if present). A prebuilt consumer without
-        -- the nested openvr submodule gets them from the bundle instead (see before_config).
+        -- the nested openvr submodule gets them from the bundle instead (see on_config).
         local ovr = path.join(os.scriptdir(), "extern", "openvr", "headers")
         if os.isdir(ovr) then
             add_includedirs(ovr, { public = true })
@@ -221,7 +278,13 @@ target("commonlibsse-ng", function()
     end
 
     -- add options
-    add_options("rex_ini", "rex_json", "rex_toml", "skyrim_se", "skyrim_ae", "skyrim_vr", "skse_xbyak", "tests", { public = true })
+    add_options("rex_ini", "rex_json", "rex_toml", "skyrim_se", "skyrim_ae", "skyrim_vr", "skse_xbyak", "skse_patch_safety", "tests", { public = true })
+
+    if (has_config("skyrim_se") and has_config("skyrim_ae"))
+        or (has_config("skyrim_se") and has_config("skyrim_vr"))
+        or (has_config("skyrim_ae") and has_config("skyrim_vr")) then
+        add_defines("HAS_SKYRIM_MULTI_TARGETING=1", { public = true })
+    end
 
     -- System links + sources. A phony (prebuilt) target ignores add_files, and the
     -- prebuilt path adds its own public syslinks in on_load, so this stays unconditional.

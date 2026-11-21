@@ -206,8 +206,9 @@ namespace RE
 				}
 				if SKYRIM_REL_CONSTEXPR (REL::Module::IsAE()) {
 					return REL::RelocateMember<bool>(this, 0x54);
+				} else {
+					return REL::RelocateMember<bool>(this, 0x50);
 				}
-				return REL::RelocateMember<bool>(this, 0x50);
 			}
 
 			// Legacy AE's letterbox/useEarlyZ sit 4 bytes later (0x55/0x59) than SE/VR's (0x51/0x55).
@@ -286,6 +287,13 @@ namespace RE
 					return REL::RelocateMember<bool>(this, 0x57);
 				}
 				return false;
+			}
+
+			void BuildCameraStateData(CameraStateData* a_entry, const NiCamera* a_camera, bool a_useJitter)
+			{
+				using func_t = decltype(&State::BuildCameraStateData);
+				static REL::Relocation<func_t> func{ RELOCATION_ID(75711, 77520) };
+				return func(this, a_entry, a_camera, a_useJitter);
 			}
 
 			void SetCameraData(const NiCamera* a_camera, std::uint32_t a_flags)
